@@ -126,6 +126,7 @@ software, even if advised of the possibility of such damage.
 	
 	<!-- create jar for distribution -->
 	<target name="jar" depends="build">
+		<mkdir dir="${dist}"/>
         <jar basedir="${build}" jarfile="${dist}/${jarname}"/>		
 	</target>
 
