@@ -1,0 +1,126 @@
+<!--
+Copyright (c) 2005, Martian Software
+Original Author: John Mutchek
+<http://www.martiansoftware.com/markdownj>
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+
+* Neither the names "Markdown", "MarkdownJ" nor the names of its 
+  contributors may be used to endorse or promote products derived from 
+  this software without specific prior written permission.
+
+This software is provided by the copyright holders and contributors "as
+is" and any express or implied warranties, including, but not limited
+to, the implied warranties of merchantability and fitness for a
+particular purpose are disclaimed. In no event shall the copyright owner
+or contributors be liable for any direct, indirect, incidental, special,
+exemplary, or consequential damages (including, but not limited to,
+procurement of substitute goods or services; loss of use, data, or
+profits; or business interruption) however caused and on any theory of
+liability, whether in contract, strict liability, or tort (including
+negligence or otherwise) arising in any way out of the use of this
+software, even if advised of the possibility of such damage.
+
+-->
+
+<project basedir="." name="markdownj" default="test">
+
+	<property name="name" value="markdownj" />
+	<property name="version" value="0.1.0" />
+	<property name="coreversion" value="1.01" />
+	<property name="java" value="src/java" />
+	<property name="lib" value="lib" />
+	<property name="build" value="bin" />
+	<property name="report" value="rpt" />
+	<property name="javadoc" value="${report}/javadoc" />
+	<property name="junit" value="${report}/junit" />
+	<property name="dist" value="dist" />
+	<property name="archive" value="archive" />
+	<property name="tools" value="tools" />
+	<property name="jarname" value="${name}-${coreversion}-${version}.jar" />
+	<property name="zipname" value="${name}-${coreversion}-${version}.jar" />
+
+	<!-- jars required for build -->
+	<path id="lib.class.path">
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- jars required for tools -->
+	<path id="tools.class.path">
+		<fileset dir="${tools}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- initialize build environment -->
+	<target name="init">
+		<tstamp />
+	</target>
+
+	<!-- compile source -->
+	<target name="build" depends="init">
+		<mkdir dir="${build}" />
+		<javac destdir="${build}" srcdir="${java}">
+			<classpath refid="lib.class.path" />
+		</javac>
+		<!-- copy non-java files, like .properties files, to build dir. -->
+		<copy todir="${build}">
+			<fileset dir="${java}" excludes="**/*.java" />
+		</copy>
+	</target>
+
+	<!-- execute junit tests and build report -->
+	<target name="test" depends="build">
+		<mkdir dir="${junit}/results" />
+		<junit printsummary="on" fork="true">
+			<batchtest fork="yes" todir="${junit}/results">
+				<fileset dir="${java}">
+					<include name="**/*test*/*.java" />
+				</fileset>
+				<formatter type="xml" />
+			</batchtest>
+			<formatter type="plain" usefile="false" />
+			<classpath refid="lib.class.path" />
+			<classpath refid="tools.class.path" />
+			<classpath>
+				<pathelement location="${build}" />
+			</classpath>
+		</junit>
+		<junitreport todir="${junit}">
+			<fileset dir="${junit}/results">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="noframes" todir="${junit}" />
+		</junitreport>
+	</target>
+	
+	
+	<!-- create javadoc -->
+	<target name="javadoc" depends="build">
+        <javadoc 
+        	destdir="${javadoc}" 
+        	packagenames="com.petebevin.markdown.*" 
+        	excludepackagenames="com.petebevin.markdown.test"
+        	defaultexcludes=""
+        	sourcepath="${java}" />
+	</target>
+	
+	<!-- create jar for distribution -->
+	<target name="jar" depends="build">
+        <jar basedir="${build}" jarfile="${dist}/${jarname}"/>		
+	</target>
+
+</project>
