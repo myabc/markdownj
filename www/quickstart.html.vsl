@@ -5,182 +5,22 @@
 #parse ("submenu.vsl")
 <h1>MarkdownJ Quick Start</h1>
 
-<p>This quick start assumes enough familiarity with Java to manage your
-classpath.  A better manual is needed - writing code isn't the only way
-to contribute to open source! (hint hint).</p>
+<p>This quick start assumes a basic familiarity with Java.</p>
 
+<h2>MarkdownJ as a standalone application</h2>
+MarkdownJ can be used from the command line as a simple text2html conversion utility.  The
+textfile to be converted is read in on stdin and the resulting html is output to stdout.
 <ol>
-<li>Make sure your classpath includes nailgun-0.7.1.jar and any class(es) you want NailGun to run.
-All your classes need is a standard <code>main()</code> method.  You can also use the examples
-provided in the nailgun-examples-0.7.1.jar file.</li>
-<li>Launch the NailGun server with "<code>java -server com.martiansoftware.nailgun.NGServer</code>".
-The <code>-server</code> isn't strictly required, but it provides a little extra oomph.</li>
-<li>From another command line session, run your class from the nailgun
-client with "<code>ng com.yourdomain.yourpackage.YourClass</code>".  If your
-class expects command line arguments, go ahead and include them after the classname.</li>
+<li>Make sure your classpath includes markdownj-0.1.0.jar.
+<li>Launch MarkdownJ with "<code>java com.petebevin.markdown.MarkdownProcessor &lt; textfile &gt; htmlfile</code>".
 </ol>
 
-<p>That's it.</p>
-
-<p>To shut down the server, use the <code>ng</code> client again.  The command
-is "<code>ng ng-stop</code>".  Some statistics will be displayed when NailGun
-shuts down.</p>
-
-<p class="section">Aliases</p>
-
-<p>You can avoid a lot of typing by defining aliases for your classnames.  Make sure
-the NailGun server is still running, and set an alias via "<code>ng ng-alias (aliasName) (aliasClass)</code>".
-Replace (aliasName) with a short name of your choosing, and (aliasClass) with the fully
-qualified classname of your class.  You can have multiple aliases for the same class.
-You'll see why this is useful later.</p>
-
-<p>To see what aliases are currently defined, use "<code>ng ng-alias</code>" with no
-arguments.</p>
-
-<p class="section">Symbolic Links</p>
-
-<p>If you find that aliases still require too much typing, you can create a symbolic
-link for the <code>ng</code> client.  The name you give the link will be interpreted
-as the command or classname.  You can use either an alias or a fully qualified classname for your 
-symlink.</p>
-
-<p class="section">Nails</p>
-
-<p>For MUCH greater functionality, you can provide an additional method in your class:</p>
-
-<pre><code>public static void nailMain(<a rel="external" href="api/com/martiansoftware/nailgun/NGContext.html">NGContext</a> context) {
-	...
-}</code></pre>
-
-<p>If you provide such a method, congratulations.  You've written a Nail.
-The context provides a great deal of information about the
-connection, including the client's environment variables, working directory, IP address,
-and lots more - including the command that was issued by the client (remember what I said
-above about multiple aliases pointing to the same class?  Look at the <a href="#stack">Stack</a>
-example to see how you can take advantage of this).  For more details, <a rel="external" href="api">see the API</a>.</p>
-
-<p>If your class happens to provide both <code>nailMain</code> <b>and</b> <code>main</code>, 
-<code>nailMain</code> will be called by the NailGun server.</p>
-
-<p class="section">Overriding Defaults</p>
-
-<p>By default, the NailGun server listens on port 2113, and the client
-connects to localhost on that same port.</p>
-
-<p>To run the server on a different port, include the port as an argument when you launch the server.
-That is, to run the server on port 8765, launch NailGun with "<code>java -server com.martiansoftware.nailgun.NGServer 8765</code>".</p>
-
-<p>To bind the server to a specific address, specify the address as an argument when you launch the server.
-That is, to run the server only on the loopback address, launch NailGun with "<code>java -server com.martiansoftware.nailgun.NGServer 127.0.0.1</code>".</p>
-
-<p>To combine the above options, specify both separated by a colon.
-That is, to run the server only on the loopback address on port 8765, launch NailGun with "<code>java -server com.martiansoftware.nailgun.NGServer 127.0.0.1:8765</code>".</p>
-
-<p>Specify port 0 to have NGServer select a port automatically.  The selected port number will be displayed on System.out.</p>
-
-<p>The client presents a couple more options.  First, the server and port can be
-individually set via the <code>NAILGUN_SERVER</code> and <code>NAILGUN_PORT</code>
-environment variables.</p>
-
-<p>Both the defaults and the environment variables can be overridden via command
-line arguments to the <code>ng</code> client.  The arguments are "<code>--nailgun-server</code>"
-and "<code>--nailgun-port</code>", and they can be placed anywhere on the <code>ng</code>
-command line.  They will not be passed as command line arguments to your Nails.  So
-to shutdown the server you just started on port 8765, issue the command "<code>ng --nailgun-port 8765 ng-stop</code>"
-or "<code>ng ng-stop --nailgun-port 8765</code>".</p>
-
-<p class="section">Embedding NailGun</p>
-
-<p>You don't have to run NailGun as a standalone server; it's very easy to create an
-<code><a rel="external" href="api/com/martiansoftware/nailgun/NGServer.html">NGServer</a></code> object and start it within your own application in order to
-provide command-line interaction with your running app.  <a rel="external" href="api">See the API</a> for more details.</p>
-
-<p class="section">Builtin Nails</p>
-
-<p>NailGun comes with a few basic nails that help run the server.  These nails, like the rest of NailGun, should
-be considered early alpha quality - they are not robust if you specify invalid arguments,
-and their usage, or even existence, may change in the future.  These nails have aliases
-by default.</p>
-
-<ul>
-	<li><b>ng-alias</b> (com.martiansoftware.nailgun.builtins.NGAlias) -
-	When called with no arguments, displays NailGun's current aliases.
-	When called with two arguments, the first argument becomes an alias
-	for the fully-qualified classname specified in the second argument.</li>
-	
-	<li><b>ng-cp</b> (com.martiansoftware.nailgun.builtins.NGClasspath) -
-	When called with no arguments, displays the system classpath.  When
-	called with one or more arguments, each argument is resolved by the
-	server to a local file or directory and added to the server's classpath.</li>
-
-	<li><b>ng-stats</b> (com.martiansoftware.nailgun.builtins.NGServerStats) -
-	Displays nail statistics, including the fully-qualified classname, 
-	the number of times that class has run in the current server, and the
-	number of instances <i>currently</i> running in the server.</li>
-	
-	<li><b>ng-stop</b> (com.martiansoftware.nailgun.builtins.NGStop) -
-	Shuts down the server, displaying ng-stats-style server statistics to the server's
-	System.out.</li>
-	
-	<li><b>ng-version</b> (com.martiansoftware.nailgun.builtins.NGVersion) -
-	Displays the server version number.</li>
-
-</ul>
-
-<p class="section">Example Nails</p>
-
-<p>No aliases are created for these nails by default, and they are not
-included in the regular nailgun .jar file.  <b>To use these examples,
-be sure to include the nailgun-examples-0.7.jar file in your server's
-classpath!</b></p>
-
-<ul>
-	<li><b>com.martiansoftware.nailgun.examples.Exit</b> - If you provide any command line
-	arguments, the first argument is converted to an exit code and passed to System.exit()
-	by the nail.  The server traps this and instructs the client to exit with the specified
-	code.  If no (or non-numeric) arguments are supplied, a nonzero exit code is chosen
-	at random.</li>
-
-	<li><b>com.martiansoftware.nailgun.examples.DumpAll</b> <i>was: DumpArgs</i> - displays
-	all information available from the NGContext (command line arguments, client environment, etc.) and exits.</li>
-	
-	<li><b>com.martiansoftware.nailgun.examples.Echo</b> - copies stdin
-	to stdout.  Basically a no-op.  Running "<code>cat file1 | ng com.martiansoftware.nailgun.examples.Echo > file2</code>"
-	should create a new file, file2, that is identical to file1.</li>
-	
-	<li><b>com.martiansoftware.nailgun.examples.Hash</b> - when called
-	with no arguments, displays a list of available hash functions.  When
-	called with a single argument specifying one of those hash functions,
-	this nail hashes stdin using the specified function, and displays the
-	result as a hexadecimal string to stdout.</li>
-	
-	<li><b>com.martiansoftware.nailgun.examples.HelloWorld</b> - displays
-	a friendly greeting.</li>
-	
-	<li><b>com.martiansoftware.nailgun.examples.Prompt</b> - presents the
-	user with a JOptionPane requesting user input.  If the user clicks
-	"Cancel", the client exits with exit code 1.  Otherwise, the user's
-	input is printed to stdout.  Try calling this nail more than once
-	in a running server and observe the speed difference between the first
-	and second calls - the JVM had to start the AWT/Swing subsystems the
-	first time, but not the second.</li>
-	
-	<li><a id="stack"></a><b>com.martiansoftware.nailgun.examples.Stack</b> - in order to
-	work properly, this class must have the aliases "push" and "pop"
-	associated with it.  With these aliases set, "<code>ng push arg1 [arg2 ...]</code>"
-	will push the specified arguments onto a stack.  "<code>ng pop</code>"
-	will pop a single item from the stack and write it to stdout.  If
-	nothing is on the stack, this will block until something is pushed or
-	the server is shut down (in which case it will exit with exit code 1).
-	Note that this is thread-safe; you can have multiple processes blocking
-	on a "pop" and only one (determined by the JVM) will receive the next
-	item pushed.</li>
-	
-	<li><b>com.martiansoftware.nailgun.examples.ThreadTest</b> - this is
-	just a silly program to make sure that any child threads spawned by
-	a nail properly inherit stdin/stdout/stderr from their parent.  Not
-	much to see here.</li>
-</ul>
+<h2>MarkdownJ as a library in another Java application</h2>
+The primary use of MarkdownJ is as a class library to be invoked in your Java application.
+<ol>
+<li>Make sure your application classpath includes markdownj-0.1.0.jar.
+<li>Use the following sample code to invoke MarkdownJ "<code> m = new MarkdownProcessor(); String html = m.markdown("This is a *simple* test.");</code>".
+</ol>
 
 <p class="section">Bugs, Suggestions, Etc.</p>
 
