@@ -1,7 +1,7 @@
 <!--
 Copyright (c) 2005, Martian Software
-Original Author: John Mutchek
-<http://www.martiansoftware.com/markdownj>
+Authors: John Mutchek, Marty Lamb
+http://www.martiansoftware.com/markdownj
 
 All rights reserved.
 
@@ -42,8 +42,10 @@ software, even if advised of the possibility of such damage.
 	<property name="java" value="src/java" />
 	<property name="build" value="bin" />
 	<property name="report" value="rpt" />
+	<property name="test" value="tests" />
 	<property name="javadoc" value="${report}/javadoc" />
 	<property name="junit" value="${report}/junit" />
+	<property name="test-output" value="${report}/test-output" />
 	<property name="dist" value="dist" />
 	<property name="archive" value="archive" />
 	<property name="tools" value="tools" />
@@ -96,6 +98,21 @@ software, even if advised of the possibility of such damage.
 		</junitreport>
 	</target>
 	
+	<!-- test ant filter -->
+	<target name="testfilter">
+		<mkdir dir="${test-output}"/>
+		<copy todir="${test-output}">
+			<fileset dir="${test}" includes="**/*.text"/>
+			<mapper type="glob" from="*.text" to="*.html"/>
+			<filterchain>
+				<filterreader classname="com.petebevin.markdown.MarkdownFilter">
+					<classpath>
+						<pathelement location="${build}" />
+					</classpath>
+				</filterreader>
+			</filterchain>
+		</copy>
+	</target>
 	
 	<!-- create javadoc -->
 	<target name="javadoc" depends="build">
