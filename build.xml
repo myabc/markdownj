@@ -40,7 +40,6 @@ software, even if advised of the possibility of such damage.
 	<property name="version" value="0.1.0" />
 	<property name="coreversion" value="1.01" />
 	<property name="java" value="src/java" />
-	<property name="lib" value="lib" />
 	<property name="build" value="bin" />
 	<property name="report" value="rpt" />
 	<property name="javadoc" value="${report}/javadoc" />
@@ -50,13 +49,6 @@ software, even if advised of the possibility of such damage.
 	<property name="tools" value="tools" />
 	<property name="jarname" value="${name}-${coreversion}-${version}.jar" />
 	<property name="zipname" value="${name}-${coreversion}-${version}.jar" />
-
-	<!-- jars required for build -->
-	<path id="lib.class.path">
-		<fileset dir="${lib}">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
 
 	<!-- jars required for tools -->
 	<path id="tools.class.path">
@@ -73,9 +65,7 @@ software, even if advised of the possibility of such damage.
 	<!-- compile source -->
 	<target name="build" depends="init">
 		<mkdir dir="${build}" />
-		<javac destdir="${build}" srcdir="${java}">
-			<classpath refid="lib.class.path" />
-		</javac>
+		<javac destdir="${build}" srcdir="${java}" />
 		<!-- copy non-java files, like .properties files, to build dir. -->
 		<copy todir="${build}">
 			<fileset dir="${java}" excludes="**/*.java" />
@@ -93,7 +83,6 @@ software, even if advised of the possibility of such damage.
 				<formatter type="xml" />
 			</batchtest>
 			<formatter type="plain" usefile="false" />
-			<classpath refid="lib.class.path" />
 			<classpath refid="tools.class.path" />
 			<classpath>
 				<pathelement location="${build}" />
