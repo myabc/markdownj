@@ -1,6 +1,7 @@
 /*
-Copyright (c) 2005, Pete Bevin.
-<http://markdownj.petebevin.com>
+Copyright (c) 2005, Martian Software
+Authors: Pete Bevin, John Mutchek
+http://www.martiansoftware.com/markdownj
 
 All rights reserved.
 
@@ -53,6 +54,8 @@ public class MarkdownProcessor {
     private static final CharacterProtector HTML_PROTECTOR = new CharacterProtector();
     private static final CharacterProtector CHAR_PROTECTOR = new CharacterProtector();
     private int listLevel;
+    private String emptyElementSuffix = " />";
+    private int tabWidth = 4;
 
     /**
      * Creates a new Markdown processor.
@@ -170,6 +173,8 @@ public class MarkdownProcessor {
 
         String alternationA = join("|", tagsA);
         String alternationB = alternationA + "|" + join("|", tagsB);
+        
+        int less_than_tab = tabWidth - 1;
 
         // First, look for nested blocks, e.g.:
         //   <div>
@@ -216,7 +221,7 @@ public class MarkdownProcessor {
                 "\\A\\n?" +
                 ")" +
                 "(" +
-                "[ ]{0,3}" + // TODO
+                "[ ]{0," + less_than_tab + "}" +
                 "<(hr)" +
                 "\\b" +
                 "([^<>])*?" +
@@ -232,7 +237,7 @@ public class MarkdownProcessor {
                 "\\A\\n?" +
                 ")" +
                 "(" +
-                "[ ]{0,3}" + // TODO
+                "[ ]{0," + less_than_tab + "}" +
                 "(?s:" +
                 "<!" +
                 "(--.*?--\\s*)+" +
@@ -316,7 +321,7 @@ public class MarkdownProcessor {
     private TextEditor doBlockQuotes(TextEditor markup) {
         Pattern p = Pattern.compile("(" +
                 "(" +
-                "^[ ]*>[ ]?" + // > at the start of a line
+                "^[ \t]*>[ \t]?" + // > at the start of a line
                 ".+\\n" + // rest of the first line
                 "(.+\\n)*" + // subsequent consecutive lines
                 "\\n*" + // blanks
@@ -325,8 +330,8 @@ public class MarkdownProcessor {
         return markup.replaceAll(p, new Replacement() {
             public String replacement(Matcher m) {
                 TextEditor blockQuote = new TextEditor(m.group(1));
-                blockQuote.deleteAll("^[ ]*>[ ]?");
-                blockQuote.deleteAll("^[ ]+$");
+                blockQuote.deleteAll("^[ \t]*>[ \t]?");
+                blockQuote.deleteAll("^[ \t]+$");
                 blockQuote = runBlockGamut(blockQuote);
                 blockQuote.replaceAll("^", "  ");
 
@@ -378,7 +383,7 @@ public class MarkdownProcessor {
     }
 
     private TextEditor doLists(TextEditor text) {
-        int lessThanTab = 3; // TODO
+        int lessThanTab = tabWidth - 1;
         String wholeList =
                 "(" +
                 "(" +
@@ -521,8 +526,9 @@ public class MarkdownProcessor {
     }
 
     public TextEditor runSpanGamut(TextEditor text) {
+        text = escapeSpecialCharsWithinTagAttributes(text);
         text = doCodeSpans(text);
-        text = escapeSpecialChars(text);
+        text = encodeBackslashEscapes(text);
 
         doImages(text);
         doAnchors(text);
@@ -535,22 +541,33 @@ public class MarkdownProcessor {
         return text;
     }
 
-    private TextEditor escapeSpecialChars(TextEditor text) {
+    /**
+     * escape special characters
+     * 
+     * Within tags -- meaning between < and > -- encode [\ ` * _] so they
+     * don't conflict with their use in Markdown for code, italics and strong.
+     * We're replacing each such character with its corresponding random string
+     * value; this is likely overkill, but it should prevent us from colliding
+     * with the escape values by accident.
+     * 
+     * @param text
+     * @return
+     */
+    private TextEditor escapeSpecialCharsWithinTagAttributes(TextEditor text) {
         Collection tokens = text.tokenizeHTML();
         TextEditor newText = new TextEditor("");
 
         for (Iterator iterator = tokens.iterator(); iterator.hasNext();) {
             HTMLToken token = (HTMLToken) iterator.next();
+            String value = "";
+            value = token.getText();
             if (token.isTag()) {
-                String value = token.getText();
-                // TODO: escape * and _
-                newText.append(value);
-            } else {
-                TextEditor ed = new TextEditor(token.getText());
-                encodeBackslashEscapes(ed);
-                String s = ed.toString();
-                newText.append(s);
+                value = value.replaceAll("\\\\", CHAR_PROTECTOR.encode("\\"));
+                value = value.replaceAll("`", CHAR_PROTECTOR.encode("`"));
+                value = value.replaceAll("\\*", CHAR_PROTECTOR.encode("*"));
+                value = value.replaceAll("_", CHAR_PROTECTOR.encode("_"));                
             }
+            newText.append(value);
         }
 
         return newText;
@@ -581,10 +598,15 @@ public class MarkdownProcessor {
                 LinkDefinition defn = (LinkDefinition) linkDefinitions.get(id.toLowerCase());
                 if (defn != null) {
                     String url = defn.getUrl();
-                    // TODO: subst * and _
+                    // protect emphasis (* and _) within urls
+                    url = url.replaceAll("\\*", CHAR_PROTECTOR.encode("*"));
+					url = url.replaceAll("_", CHAR_PROTECTOR.encode("_"));
                     String title = defn.getTitle();
                     String titleTag = "";
                     if (title != null && !title.equals("")) {
+                        // protect emphasis (* and _) within urls
+                        title = title.replaceAll("\\*", CHAR_PROTECTOR.encode("*"));
+                        title = title.replaceAll("_", CHAR_PROTECTOR.encode("_"));
                         titleTag = " title=\"" + title + "\"";
                     }
                     replacementText = "<a href=\"" + url + "\"" + titleTag + ">" + linkText + "</a>";
@@ -614,9 +636,15 @@ public class MarkdownProcessor {
                 String linkText = m.group(2);
                 String url = m.group(3);
                 String title = m.group(6);
+                // protect emphasis (* and _) within urls
+                url = url.replaceAll("\\*", CHAR_PROTECTOR.encode("*"));
+                url = url.replaceAll("_", CHAR_PROTECTOR.encode("_"));
                 StringBuffer result = new StringBuffer();
                 result.append("<a href=\"").append(url).append("\"");
                 if (title != null) {
+                    // protect emphasis (* and _) within urls
+                    title = title.replaceAll("\\*", CHAR_PROTECTOR.encode("*"));
+                    title = title.replaceAll("_", CHAR_PROTECTOR.encode("_"));
                     title = replaceAll(title, "\"", "&quot;");
                     result.append(" title=\"");
                     result.append(title);
@@ -638,13 +666,15 @@ public class MarkdownProcessor {
     }
 
     private TextEditor encodeAmpsAndAngles(TextEditor markup) {
+        // Ampersand-encoding based entirely on Nat Irons's Amputator MT plugin:
+        // http://bumppo.net/projects/amputator/
         markup.replaceAll("&(?!#?[xX]?(?:[0-9a-fA-F]+|\\w+);)", "&amp;");
         markup.replaceAll("<(?![a-z/?\\$!])", "&lt;");
         return markup;
     }
 
     private TextEditor doCodeSpans(TextEditor markup) {
-        return markup.replaceAll(Pattern.compile("(`+)(.+?)(?<!`)\\1(?!`)"), new Replacement() {
+            return markup.replaceAll(Pattern.compile("(?<!\\\\)(`+)(.+?)(?<!`)\\1(?!`)"), new Replacement() {
                     public String replacement(Matcher m) {
                         String code = m.group(2);
                         TextEditor subEditor = new TextEditor(code);
@@ -673,7 +703,7 @@ public class MarkdownProcessor {
     }
 
     public String toString() {
-        return "Markdown Processor for Java (version 0.1.0)";
+        return "Markdown Processor for Java 0.2.0 (compatible with Markdown 1.0.2b1)";
     }
     
     public static void main(String[] args) {
