@@ -102,3 +102,19 @@ Bang: `\!`
 Plus: `\+`
 
 Minus: `\-`
+
+
+These should get escaped, even though they're matching pairs for
+other Markdown constructs:
+
+\*asterisks\*
+
+\_underscores\_
+
+\`backticks\`
+
+This is a code span with a literal backslash-backtick sequence: `` \` ``
+
+This is a tag with unescaped backticks <span attr='`ticks`'>bar</span>.
+
+This is a tag with backslashes <span attr='\\backslashes\\'>bar</span>.
