@@ -55,7 +55,7 @@ public class TextEditor {
      * @param text
      */
     public TextEditor(CharSequence text) {
-        this.text = new StringBuffer(text);
+        this.text = new StringBuffer(text.toString());
     }
 
     /**
@@ -118,11 +118,11 @@ public class TextEditor {
         int lastIndex = 0;
         StringBuffer sb = new StringBuffer();
         while (m.find()) {
-            sb.append(text, lastIndex, m.start());
+            sb.append(text.subSequence(lastIndex, m.start()));
             sb.append(replacement.replacement(m));
             lastIndex = m.end();
         }
-        sb.append(text, lastIndex, text.length());
+        sb.append(text.subSequence(lastIndex, text.length()));
         text = sb;
         return this;
     }
