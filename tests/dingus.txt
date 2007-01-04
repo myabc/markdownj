@@ -83,18 +83,12 @@ Header 2
 # Result 9
 <ul>
 <li>Abacus
-<ul>
-<li>ass</li>
-</ul></li>
+<ul><li>ass</li></ul></li>
 <li>Bastard
-<ol>
-<li>bitch</li>
+<ol><li>bitch</li>
 <li>bupkis
-<ul>
-<li>BELITTLER</li>
-</ul></li>
-<li>burper</li>
-</ol></li>
+<ul><li>BELITTLER</li></ul></li>
+<li>burper</li></ol></li>
 <li>Cunning</li>
 </ul>
 

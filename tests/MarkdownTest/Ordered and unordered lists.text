@@ -120,3 +120,12 @@ Same thing but with paragraphs:
 	* Foe
 
 3. Third
+
+
+This was an error in Markdown 1.0.1:
+
+*	this
+
+	*	sub
+
+	that
