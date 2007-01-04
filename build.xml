@@ -37,8 +37,8 @@ software, even if advised of the possibility of such damage.
 <project basedir="." name="markdownj" default="test">
 
 	<property name="name" value="markdownj" />
-	<property name="version" value="0.2.0" />
-	<property name="coreversion" value="1.0.2b1" />
+	<property name="version" value="0.3.0" />
+	<property name="coreversion" value="1.0.2b4" />
 	<property name="java" value="src/java" />
 	<property name="build" value="bin" />
 	<property name="report" value="rpt" />
@@ -127,7 +127,7 @@ software, even if advised of the possibility of such damage.
 	<!-- create jar for distribution -->
 	<target name="jar" depends="build">
 		<mkdir dir="${dist}"/>
-		<mkdir dir="${version}"/>
+		<mkdir dir="${dist}/${version}"/>
         <jar basedir="${build}" jarfile="${dist}/${version}/${jarname}"/>
 	</target>
 
