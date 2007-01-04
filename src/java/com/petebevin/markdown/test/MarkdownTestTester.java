@@ -81,7 +81,8 @@ public class MarkdownTestTester extends TestCase {
         String testText = slurp(new File(dir, test + ".text"));
         String htmlText = slurp(new File(dir, test + ".html"));
         MarkdownProcessor markup = new MarkdownProcessor();
-        assertEquals(test, htmlText.trim(), markup.markdown(testText).trim());
+        String markdownText = markup.markdown(testText);
+        assertEquals(test, htmlText.trim(), markdownText.trim());
     }
 
     private String slurp(File file) throws IOException {
