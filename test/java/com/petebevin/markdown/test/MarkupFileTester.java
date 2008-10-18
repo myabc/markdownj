@@ -132,6 +132,7 @@ public class MarkupFileTester extends TestCase {
         return s.substring(0, lastPos + 1);
     }
 
+    @Override
     public void runTest() {
         MarkdownProcessor markup = new MarkdownProcessor();
         assertEquals(pair.toString(), pair.getResult().trim(), markup.markdown(pair.getTest()).trim());

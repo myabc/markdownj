@@ -41,8 +41,8 @@ import java.util.Map;
 import java.util.Random;
 
 class CharacterProtector {
-    private Map protectMap = new HashMap();
-    private Map unprotectMap = new HashMap();
+    private Map<String, String> protectMap = new HashMap<String, String>();
+    private Map<String, String> unprotectMap = new HashMap<String, String>();
     private static final String GOOD_CHARS = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
     private Random rnd = new Random();
 
@@ -51,11 +51,11 @@ class CharacterProtector {
         if (!protectMap.containsKey(literal)) {
             addToken(literal);
         }
-        return (String) protectMap.get(literal);
+        return protectMap.get(literal);
     }
 
     public String decode(String coded) {
-        return (String) unprotectMap.get(coded);
+        return unprotectMap.get(coded);
     }
 
     public Collection getAllEncodedTokens() {

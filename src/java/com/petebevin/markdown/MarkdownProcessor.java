@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
  */
 public class MarkdownProcessor {
     private Random rnd = new Random();
-    private Map linkDefinitions = new TreeMap();
+    private Map<String, LinkDefinition> linkDefinitions = new TreeMap<String, LinkDefinition>();
     private static final CharacterProtector HTML_PROTECTOR = new CharacterProtector();
     private static final CharacterProtector CHAR_PROTECTOR = new CharacterProtector();
     private int listLevel;
@@ -649,7 +649,7 @@ public class MarkdownProcessor {
                     id = linkText.toLowerCase();
                 }
 
-                LinkDefinition defn = (LinkDefinition) linkDefinitions.get(id);
+                LinkDefinition defn = linkDefinitions.get(id);
                 if (defn != null) {
                     String url = defn.getUrl();
                     // protect emphasis (* and _) within urls
@@ -726,7 +726,7 @@ public class MarkdownProcessor {
         		String id = m.group(2).toLowerCase(); // link id should be lowercase
         		id = id.replaceAll("[ ]?\\n", " "); // change embedded newlines into spaces
 
-                LinkDefinition defn = (LinkDefinition) linkDefinitions.get(id.toLowerCase());
+                LinkDefinition defn = linkDefinitions.get(id.toLowerCase());
                 if (defn != null) {
                     String url = defn.getUrl();
                     // protect emphasis (* and _) within urls

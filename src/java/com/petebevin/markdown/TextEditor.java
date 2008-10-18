@@ -223,7 +223,7 @@ public class TextEditor {
      * @return
      */
     public Collection tokenizeHTML() {
-        List tokens = new ArrayList();
+        List<HTMLToken> tokens = new ArrayList<HTMLToken>();
         String nestedTags = nestedTagsRegex(6);
 
         Pattern p = Pattern.compile("" +
