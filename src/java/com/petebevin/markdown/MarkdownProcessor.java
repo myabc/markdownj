@@ -437,7 +437,7 @@ public class MarkdownProcessor {
                     result = result.replaceAll("\\s+$", "");
 
                     String html;
-                    if ("ui".equals(listType)) {
+                    if ("ul".equals(listType)) {
                         html = "<ul>" + result + "</ul>\n";
                     } else {
                         html = "<ol>" + result + "</ol>\n";
