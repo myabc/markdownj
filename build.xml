@@ -81,7 +81,7 @@ software, even if advised of the possibility of such damage.
     <target name="build" depends="init">
         <mkdir dir="${build}" />
         <javac srcdir="${java}"
-               destdir="${build}"  
+               destdir="${build}"
                source="1.5"
                target="1.5">
             <compilerarg value="-Xlint"/>
@@ -90,6 +90,12 @@ software, even if advised of the possibility of such damage.
         <copy todir="${build}">
             <fileset dir="${java}" excludes="**/*.java" />
         </copy>
+    </target>
+
+    <target name="clean-build">
+        <delete verbose="true">
+          <fileset dir="bin" includes="**/*.class" />
+        </delete>
     </target>
 
     <!-- compile test source -->
@@ -168,5 +174,7 @@ software, even if advised of the possibility of such damage.
         <mkdir dir="${dist}/${version}"/>
         <jar basedir="${build}" jarfile="${dist}/${version}/${jarname}"/>
     </target>
+
+    <target name="clean" depends="clean-build-test,clean-build"/>
 
 </project>
