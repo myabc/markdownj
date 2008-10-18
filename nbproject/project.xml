@@ -38,7 +38,24 @@
                 <action name="test">
                     <target>test</target>
                 </action>
+                <action name="clean">
+                    <target>clean</target>
+                </action>
+                <action name="rebuild">
+                    <target>clean</target>
+                    <target>build</target>
+                </action>
             </ide-actions>
+            <export>
+                <type>folder</type>
+                <location>bin</location>
+                <build-target>build</build-target>
+            </export>
+            <export>
+                <type>folder</type>
+                <location>test/java</location>
+                <build-target>build</build-target>
+            </export>
             <view>
                 <items>
                     <source-folder style="packages">
@@ -55,6 +72,8 @@
                 </items>
                 <context-menu>
                     <ide-action name="build"/>
+                    <ide-action name="rebuild"/>
+                    <ide-action name="clean"/>
                     <ide-action name="javadoc"/>
                     <ide-action name="test"/>
                 </context-menu>
@@ -65,12 +84,15 @@
             <compilation-unit>
                 <package-root>src/java</package-root>
                 <classpath mode="compile">lib/ant.jar</classpath>
+                <built-to>bin</built-to>
+                <javadoc-built-to>rpt/javadoc</javadoc-built-to>
                 <source-level>1.5</source-level>
             </compilation-unit>
             <compilation-unit>
                 <package-root>test/java</package-root>
                 <unit-tests/>
                 <classpath mode="compile">tools/junit.jar:src/java</classpath>
+                <built-to>test/java</built-to>
                 <source-level>1.5</source-level>
             </compilation-unit>
         </java-data>
