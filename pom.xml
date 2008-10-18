@@ -73,7 +73,7 @@ software, even if advised of the possibility of such damage.
             <roles>
                 <role>Developer</role>
             </roles>
-	</developer>
+        </developer>
         <developer>
             <id>alexbcoles</id>
             <name>Alex Coles</name>
@@ -87,6 +87,19 @@ software, even if advised of the possibility of such damage.
             <timezone>UTC+5</timezone>
         </developer>
     </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/myabc/markdownj.git</connection>
+        <url>scm:git:git://github.com/myabc/markdownj.git</url>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>googlecode</id>
+            <url>svn:https://markdownj.googlecode.com/svn/repo</url>
+        </repository>
+    </distributionManagement>
 
     <licenses>
         <license>
@@ -122,6 +135,19 @@ software, even if advised of the possibility of such damage.
         </license>
     </licenses>
 
+    <repositories>
+        <repository>
+            <id>maven2-repository.dev.java.net</id>
+            <name>Java.net Repository for Maven</name>
+            <url>http://download.java.net/maven/2/</url>
+        </repository>
+        <repository>
+            <id>don-asf-repository</id>
+            <name>Don Brown's Repository</name>
+            <url>http://people.apache.org/~mrdon/repository/</url>
+        </repository>
+    </repositories>
+
     <build>
         <sourceDirectory>src/java/</sourceDirectory>
         <testResources>
@@ -130,7 +156,38 @@ software, even if advised of the possibility of such damage.
             </testResource>
         </testResources>
         <testSourceDirectory>test/java/</testSourceDirectory>
+
+        <extensions>
+            <extension>
+                <groupId>org.jvnet.wagon-svn</groupId>
+                <artifactId>wagon-svn</artifactId>
+                <version>1.8</version>
+            </extension>
+        </extensions>
+
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-gitexe</artifactId>
+                        <version>1.1-db-1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+           <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-gitexe</artifactId>
+                        <version>1.1-db-1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.0.2</version>
