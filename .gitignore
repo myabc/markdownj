@@ -1,4 +1,6 @@
+.DS_Store
 bin
 dist
 rpt
 junit*.properties
+nbproject/private
