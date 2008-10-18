@@ -80,7 +80,12 @@ software, even if advised of the possibility of such damage.
     <!-- compile source -->
     <target name="build" depends="init">
         <mkdir dir="${build}" />
-        <javac destdir="${build}" srcdir="${java}" />
+        <javac srcdir="${java}"
+               destdir="${build}"  
+               source="1.5"
+               target="1.5">
+            <compilerarg value="-Xlint"/>
+        </javac>
         <!-- copy non-java files, like .properties files, to build dir. -->
         <copy todir="${build}">
             <fileset dir="${java}" excludes="**/*.java" />
@@ -89,7 +94,9 @@ software, even if advised of the possibility of such damage.
 
     <!-- compile test source -->
     <target name="build-test" depends="build">
-        <javac srcdir="test/java">
+        <javac srcdir="test/java"
+               source="1.5"
+               target="1.5">
             <classpath refid="tools.class.path"/>
             <classpath>
                 <pathelement location="${build}" />

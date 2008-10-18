@@ -77,6 +77,7 @@ public class MarkdownTestTester extends TestCase {
         return suite;
     }
 
+    @Override
     public void runTest() throws IOException {
         String testText = slurp(new File(dir, test + ".text"));
         String htmlText = slurp(new File(dir, test + ".html"));

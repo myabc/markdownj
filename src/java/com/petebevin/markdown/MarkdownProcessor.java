@@ -437,7 +437,7 @@ public class MarkdownProcessor {
                     result = result.replaceAll("\\s+$", "");
                     
                     String html;
-                    if (listType == "ul") {
+                    if ("ui".equals(listType)) {
                         html = "<ul>" + result + "</ul>\n";
                     } else {
                         html = "<ol>" + result + "</ol>\n";
@@ -794,6 +794,7 @@ public class MarkdownProcessor {
         return ed.toString();
     }
 
+    @Override
     public String toString() {
         return "Markdown Processor for Java 0.3.0 (compatible with Markdown 1.0.2b2)";
     }

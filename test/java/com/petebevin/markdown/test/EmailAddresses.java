@@ -42,6 +42,7 @@ import junit.framework.TestCase;
 public class EmailAddresses extends TestCase {
     MarkdownProcessor markdownProcessor;
 
+    @Override
     public void setUp() throws Exception {
         markdownProcessor = new MarkdownProcessor();
     }

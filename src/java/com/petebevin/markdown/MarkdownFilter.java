@@ -35,7 +35,6 @@ software, even if advised of the possibility of such damage.
 */
 package com.petebevin.markdown;
 
-import java.io.IOException;
 import java.io.Reader;
 
 import org.apache.tools.ant.filters.BaseParamFilterReader;
@@ -115,6 +114,7 @@ public class MarkdownFilter extends BaseParamFilterReader implements ChainableRe
      * @exception IOException if the underlying stream throws an IOException
      * during reading
      */
+    @Override
 	public final int read() throws java.io.IOException {
 		
 		if (chars == null) {

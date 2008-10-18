@@ -62,6 +62,7 @@ public class TextEditor {
      * Give up the contents of the TextEditor.
      * @return
      */
+    @Override
     public String toString() {
         return text.toString();
     }

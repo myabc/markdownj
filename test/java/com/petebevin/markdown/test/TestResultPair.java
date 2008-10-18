@@ -54,6 +54,7 @@ public class TestResultPair {
         return result;
     }
 
+    @Override
     public String toString() {
         return name;
     }

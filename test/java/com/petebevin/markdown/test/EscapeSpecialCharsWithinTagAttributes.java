@@ -42,6 +42,7 @@ import com.petebevin.markdown.MarkdownProcessor;
 public class EscapeSpecialCharsWithinTagAttributes extends TestCase {
     MarkdownProcessor markdownProcessor;
 
+    @Override
     public void setUp() throws Exception {
         markdownProcessor = new MarkdownProcessor();
     }

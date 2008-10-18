@@ -52,6 +52,7 @@ public class LinkDefinition {
         return title;
     }
 
+    @Override
     public String toString() {
         return url + " (" + title + ")";
     }

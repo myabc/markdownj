@@ -28,6 +28,7 @@ public class HTMLToken {
         return text;
     }
 
+    @Override
     public String toString() {
         String type;
         if (isTag()) {

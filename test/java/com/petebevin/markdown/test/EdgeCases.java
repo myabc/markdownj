@@ -43,6 +43,7 @@ import java.util.regex.Pattern;
 public class EdgeCases extends TestCase {
     private MarkdownProcessor m;
 
+    @Override
     public void setUp() {
         m = new MarkdownProcessor();
     }

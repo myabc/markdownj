@@ -77,6 +77,7 @@ class CharacterProtector {
         return sb.toString();
     }
 
+    @Override
     public String toString() {
         return protectMap.toString();
     }
