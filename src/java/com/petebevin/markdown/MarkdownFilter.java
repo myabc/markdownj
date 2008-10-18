@@ -16,7 +16,7 @@ met:
   notice, this list of conditions and the following disclaimer in the
   documentation and/or other materials provided with the distribution.
 
-* Neither the name "Markdown", "MarkdownJ" nor the names of its 
+* Neither the name "Markdown", "MarkdownJ" nor the names of its
   contributors may be used to endorse or promote products derived from
   this software without specific prior written permission.
 
@@ -42,7 +42,7 @@ import org.apache.tools.ant.filters.ChainableReader;
 
 /**
  * Provides a Markdown-based FilterReader suitable for use by Ant.
- * 
+ *
  * <code><pre>
  * &lt;copy file="${src.file}" tofile="${dest.file}"&gt;
  *   &lt;filterchain&gt;
@@ -54,40 +54,40 @@ import org.apache.tools.ant.filters.ChainableReader;
  */
 public class MarkdownFilter extends BaseParamFilterReader implements ChainableReader {
 
-	/**
-	 * Stores the characters post markdown
-	 */
-	char[] chars = null;
-	
-	/**
-	 * The index of the next character to return
-	 */
-	int pos = 0;
-	
-	/**
-	 * The number of characters in the array (avoid repeated chars.length calls)
-	 */
-	int len = 0;
-	
+    /**
+     * Stores the characters post markdown
+     */
+    char[] chars = null;
+
+    /**
+     * The index of the next character to return
+     */
+    int pos = 0;
+
+    /**
+     * The number of characters in the array (avoid repeated chars.length calls)
+     */
+    int len = 0;
+
     /**
      * Constructor for "dummy" instances.
      *
      * @see org.apache.tools.ant.filters.BaseFilterReader#BaseFilterReader()
      */
-	public MarkdownFilter() {
-		super();
-	}
-	
+    public MarkdownFilter() {
+        super();
+    }
+
     /**
      * Creates a new filtered reader.
      *
      * @param in A Reader object providing the underlying stream.
      *           Must not be <code>null</code>.
      */
-	public MarkdownFilter(Reader reader) {
-		super(reader);
-	}
-	
+    public MarkdownFilter(Reader reader) {
+        super(reader);
+    }
+
     /**
      * Creates a new MarkdownFilter using the passed in
      * Reader for instantiation.
@@ -98,12 +98,12 @@ public class MarkdownFilter extends BaseParamFilterReader implements ChainableRe
      * @return a new filter based on this configuration, but filtering
      *         the specified reader
      */
-	public Reader chain(Reader reader) {
-		MarkdownFilter result = new MarkdownFilter(reader);
-		result.setParameters(this.getParameters());
-		return (result);
-	}
-	
+    public Reader chain(Reader reader) {
+        MarkdownFilter result = new MarkdownFilter(reader);
+        result.setParameters(this.getParameters());
+        return (result);
+    }
+
     /**
      * Returns the next character in the filtered stream, after performing
      * the Markdown processing
@@ -115,21 +115,21 @@ public class MarkdownFilter extends BaseParamFilterReader implements ChainableRe
      * during reading
      */
     @Override
-	public final int read() throws java.io.IOException {
-		
-		if (chars == null) {
-			char[] cbuf = new char[1024];
-			StringBuffer buf = new StringBuffer();
-			int charsRead = in.read(cbuf);
-			while (charsRead >= 0) {
-				buf.append(cbuf, 0, charsRead);
-				charsRead = in.read(cbuf);
-			}
-			MarkdownProcessor markdown = new MarkdownProcessor();
-			chars = markdown.markdown(buf.toString()).toCharArray();
-			len = chars.length;
-		}
-		
-		return (pos >= len ? -1 : chars[pos++]);
-	}
+    public final int read() throws java.io.IOException {
+
+        if (chars == null) {
+            char[] cbuf = new char[1024];
+            StringBuffer buf = new StringBuffer();
+            int charsRead = in.read(cbuf);
+            while (charsRead >= 0) {
+                buf.append(cbuf, 0, charsRead);
+                charsRead = in.read(cbuf);
+            }
+            MarkdownProcessor markdown = new MarkdownProcessor();
+            chars = markdown.markdown(buf.toString()).toCharArray();
+            len = chars.length;
+        }
+
+        return (pos >= len ? -1 : chars[pos++]);
+    }
 }
