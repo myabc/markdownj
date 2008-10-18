@@ -16,8 +16,8 @@ met:
   notice, this list of conditions and the following disclaimer in the
   documentation and/or other materials provided with the distribution.
 
-* Neither the names "Markdown", "MarkdownJ" nor the names of its 
-  contributors may be used to endorse or promote products derived from 
+* Neither the names "Markdown", "MarkdownJ" nor the names of its
+  contributors may be used to endorse or promote products derived from
   this software without specific prior written permission.
 
 This software is provided by the copyright holders and contributors "as
@@ -39,18 +39,25 @@ software, even if advised of the possibility of such damage.
 	<property name="name" value="markdownj" />
 	<property name="version" value="0.3.0" />
 	<property name="coreversion" value="1.0.2b4" />
-	<property name="java" value="src/java" />
+
+	<property name="java" value="src/java"/>
+        <property name="test-dir" value="test/java"/>
+
 	<property name="build" value="bin" />
 	<property name="report" value="rpt" />
 	<property name="test" value="tests" />
 	<property name="javadoc" value="${report}/javadoc" />
 	<property name="junit" value="${report}/junit" />
 	<property name="test-output" value="${report}/test-output" />
-	<property name="dist" value="dist" />
+
+        <property name="dist" value="dist" />
 	<property name="archive" value="archive" />
 	<property name="tools" value="tools" />
 	<property name="jarname" value="${name}-${coreversion}-${version}.jar" />
 	<property name="zipname" value="${name}-${coreversion}-${version}.jar" />
+
+        <path id="classpath.base">
+        </path>
 
 	<!-- jars required for tools -->
 	<path id="tools.class.path">
@@ -58,6 +65,12 @@ software, even if advised of the possibility of such damage.
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
+
+        <path id="classpath.test">
+            <path refid="classpath.base"/>
+            <path refid="tools.class.path"/>
+            <pathelement location="${tst-dir}" />
+        </path>
 
 	<!-- initialize build environment -->
 	<target name="init">
@@ -74,21 +87,40 @@ software, even if advised of the possibility of such damage.
 		</copy>
 	</target>
 
+        <!-- compile test source -->
+        <target name="build-test" depends="build">
+            <javac srcdir="test/java">
+                <classpath refid="tools.class.path"/>
+                <classpath>
+                    <pathelement location="${build}" />
+                </classpath>
+            </javac>
+        </target>
+
+        <target name="clean-build-test">
+            <delete verbose="true">
+              <fileset dir="test/java" includes="**/*.class" />
+            </delete>
+        </target>
+
 	<!-- execute junit tests and build report -->
-	<target name="test" depends="build">
+	<target name="test" depends="build,build-test">
 		<mkdir dir="${junit}/results" />
+
 		<junit printsummary="on" fork="true">
 			<batchtest fork="yes" todir="${junit}/results">
-				<fileset dir="${java}">
-					<include name="**/*test*/*.java" />
+				<fileset dir="test/java">
+					<include name="**/*.java" />
 				</fileset>
 				<formatter type="xml" />
 			</batchtest>
 			<formatter type="plain" usefile="false" />
-			<classpath refid="tools.class.path" />
+			<classpath refid="classpath.test" />
 			<classpath>
 				<pathelement location="${build}" />
+                                <pathelement location="test/java"/>
 			</classpath>
+                    
 		</junit>
 		<junitreport todir="${junit}">
 			<fileset dir="${junit}/results">
@@ -97,7 +129,7 @@ software, even if advised of the possibility of such damage.
 			<report format="noframes" todir="${junit}" />
 		</junitreport>
 	</target>
-	
+
 	<!-- test ant filter -->
 	<target name="testfilter">
 		<mkdir dir="${test-output}"/>
@@ -113,22 +145,21 @@ software, even if advised of the possibility of such damage.
 			</filterchain>
 		</copy>
 	</target>
-	
+
 	<!-- create javadoc -->
 	<target name="javadoc" depends="build">
-        <javadoc 
-        	destdir="${javadoc}" 
-        	packagenames="com.petebevin.markdown.*" 
-        	excludepackagenames="com.petebevin.markdown.test"
+        <javadoc
+        	destdir="${javadoc}"
+        	packagenames="com.petebevin.markdown.*"
         	defaultexcludes=""
         	sourcepath="${java}" />
 	</target>
-	
+
 	<!-- create jar for distribution -->
 	<target name="jar" depends="build">
-		<mkdir dir="${dist}"/>
-		<mkdir dir="${dist}/${version}"/>
-        <jar basedir="${build}" jarfile="${dist}/${version}/${jarname}"/>
+            <mkdir dir="${dist}"/>
+            <mkdir dir="${dist}/${version}"/>
+            <jar basedir="${build}" jarfile="${dist}/${version}/${jarname}"/>
 	</target>
 
 </project>
