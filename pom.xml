@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2008, Alex Coles.
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+
+* Neither the name "Markdown" nor the names of its contributors may
+  be used to endorse or promote products derived from this software
+  without specific prior written permission.
+
+This software is provided by the copyright holders and contributors "as
+is" and any express or implied warranties, including, but not limited
+to, the implied warranties of merchantability and fitness for a
+particular purpose are disclaimed. In no event shall the copyright owner
+or contributors be liable for any direct, indirect, incidental, special,
+exemplary, or consequential damages (including, but not limited to,
+procurement of substitute goods or services; loss of use, data, or
+profits; or business interruption) however caused and on any theory of
+liability, whether in contract, strict liability, or tort (including
+negligence or otherwise) arising in any way out of the use of this
+software, even if advised of the possibility of such damage.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.markdownj</groupId>
+    <artifactId>markdownj</artifactId>
+    <packaging>jar</packaging>
+    <version>0.4-SNAPSHOT</version>
+
+    <name>markdownj</name>
+    <!--<url></url>-->
+    <description>MarkdownJ is the pure Java port of Markdown, a text-to-html conversion tool written by John Gruber.</description>
+
+    <developers>
+        <developer>
+            <name>Pete Bevin</name>
+            <email>pete@petebevin.com</email>
+            <url>http://www.petebevin.com/</url>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Marty Lamb</name>
+            <email>mlamb@martiansoftware.com</email>
+            <organization>Martian Software</organization>
+            <organizationUrl>http://www.martiansoftware.com/</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>John Mutchek</name>
+            <email>jmutchek@martiansoftware.com</email>
+            <url>http://www.mutchek.com/blog/</url>
+            <organization>Martian Software</organization>
+            <organizationUrl>http://www.martiansoftware.com/</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+	</developer>
+        <developer>
+            <id>alexbcoles</id>
+            <name>Alex Coles</name>
+            <email>alex@alexcolesportfolio.com</email>
+            <url>http://alexcolesportfolio.com</url>
+            <organization>Ikonoklastik Productions</organization>
+            <organizationUrl>http://www.ikonoklastik.com/</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>UTC+5</timezone>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>BSD license</name>
+            <comments>
+                Redistribution and use in source and binary forms, with or without
+                modification, are permitted provided that the following conditions are
+                met:
+
+                * Redistributions of source code must retain the above copyright notice,
+                  this list of conditions and the following disclaimer.
+
+                * Redistributions in binary form must reproduce the above copyright
+                  notice, this list of conditions and the following disclaimer in the
+                  documentation and/or other materials provided with the distribution.
+
+                * Neither the name "Markdown" nor the names of its contributors may
+                  be used to endorse or promote products derived from this software
+                  without specific prior written permission.
+
+                This software is provided by the copyright holders and contributors "as
+                is" and any express or implied warranties, including, but not limited
+                to, the implied warranties of merchantability and fitness for a
+                particular purpose are disclaimed. In no event shall the copyright owner
+                or contributors be liable for any direct, indirect, incidental, special,
+                exemplary, or consequential damages (including, but not limited to,
+                procurement of substitute goods or services; loss of use, data, or
+                profits; or business interruption) however caused and on any theory of
+                liability, whether in contract, strict liability, or tort (including
+                negligence or otherwise) arising in any way out of the use of this
+                software, even if advised of the possibility of such damage.
+            </comments>
+        </license>
+    </licenses>
+
+    <build>
+        <sourceDirectory>src/java/</sourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>tests/</directory>
+            </testResource>
+        </testResources>
+        <testSourceDirectory>test/java/</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.4.2</version>
+                <configuration>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                </configuration>
+           </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>${ant.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <ant.version>1.7.1</ant.version>
+        <junit.version>4.5</junit.version>
+    </properties>
+
+</project>
