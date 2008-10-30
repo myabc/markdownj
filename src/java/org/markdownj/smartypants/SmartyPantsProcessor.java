@@ -9,14 +9,14 @@
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
- *  *	Redistributions of source code must retain the above copyright
+ *  *   Redistributions of source code must retain the above copyright
  * notice, this list of conditions and the following disclaimer.
  *
- *  *	Redistributions in binary form must reproduce the above copyright
+ *  *   Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
  * documentation and/or other materials provided with the distribution.
  *
- *  *	Neither the name "SmartyPants" nor the names of its contributors may
+ *  *   Neither the name "SmartyPants" nor the names of its contributors may
  * be used to endorse or promote products derived from this software
  * without specific prior written permission.
  *
@@ -67,14 +67,14 @@ import java.util.regex.Pattern;
  */
 public class SmartyPantsProcessor {
 
+    /**
+     *  1 =>  "--" for em-dashes; no en-dash support
+     *  2 =>  "---" for em-dashes; "--" for en-dashes
+     *  3 =>  "--" for em-dashes; "---" for en-dashes
+     *  See docs for more configuration options.
+     */
     public static final String DEFAULT_OPTION = "1";
-						  //  1 =>  "--" for em-dashes; no en-dash support
-						  //  2 =>  "---" for em-dashes; "--" for en-dashes
-						  //  3 =>  "--" for em-dashes; "---" for en-dashes
-						  //  See docs for more configuration options.
-
-    public static final String TAGS_TO_SKIP = ""; // "<(/?)(?:pre|code|kbd|script|math)[\s>]";
-
+    public static final String TAGS_TO_SKIP = ""; // FIXME: "<(/?)(?:pre|code|kbd|script|math)[\s>]";
 
     /**
      *
@@ -100,12 +100,12 @@ public class SmartyPantsProcessor {
         }
 
         // Options to specify which transformations to make:
-        boolean do_quotes = false;
-        int do_backticks = 0;
-        int do_dashes = 0;
-        boolean do_ellipses = false;
-        boolean do_stupefy = false;
-        boolean convert_quot = false; // should we translate &quot; entities into normal quotes?
+        boolean doQuotes = false;
+        int doBackticks = 0;
+        int doDashes = 0;
+        boolean doEllipses = false;
+        boolean doStupefy = false;
+        boolean convertQuot = false; // should we translate &quot; entities into normal quotes?
 
         // Parse attributes:
         // 0 : do nothing
@@ -126,44 +126,47 @@ public class SmartyPantsProcessor {
         if (attr == "0") {
             // Do nothing.
             return txt;
-        }
-        else if (attr == "1") {
+        } else if (attr == "1") {
             // Do everything, turn all options on.
-            do_quotes    = true;
-            do_backticks = 1;
-            do_dashes    = 1;
-            do_ellipses  = true;
-        }
-        else if (attr == "2") {
+            doQuotes    = true;
+            doBackticks = 1;
+            doDashes    = 1;
+            doEllipses  = true;
+        } else if (attr == "2") {
             // Do everything, turn all options on, use old school dash shorthand.
-            do_quotes    = true;
-            do_backticks = 1;
-            do_dashes    = 2;
-            do_ellipses  = true;
-        }
-        else if (attr == "3") {
+            doQuotes    = true;
+            doBackticks = 1;
+            doDashes    = 2;
+            doEllipses  = true;
+        } else if (attr == "3") {
             // Do everything, turn all options on, use inverted old school dash shorthand.
-            do_quotes    = true;
-            do_backticks = 1;
-            do_dashes    = 3;
-            do_ellipses  = true;
-        }
-        else if (attr == "-1") {
+            doQuotes    = true;
+            doBackticks = 1;
+            doDashes    = 3;
+            doEllipses  = true;
+        } else if (attr == "-1") {
             // Special "stupefy" mode.
-            do_stupefy   = true;
-        }
-        else {
+            doStupefy   = true;
+        } else {
             String[] chars = attr.split("//");
             for (String c : chars) {
-                if      (c == "q") { do_quotes    = true; }
-                else if (c == "b") { do_backticks = 1; }
-                else if (c == "B") { do_backticks = 2; }
-                else if (c == "d") { do_dashes    = 1; }
-                else if (c == "D") { do_dashes    = 2; }
-                else if (c == "i") { do_dashes    = 3; }
-                else if (c == "e") { do_ellipses  = true; }
-                else if (c == "w") { convert_quot = true; }
-                else {
+                if (c == "q") { // TODO: replace with a case statement
+                    doQuotes = true;
+                } else if (c == "b") {
+                    doBackticks = 1;
+                } else if (c == "B") {
+                    doBackticks = 2;
+                } else if (c == "d") {
+                    doDashes = 1;
+                } else if (c == "D") {
+                    doDashes = 2;
+                } else if (c == "i") {
+                    doDashes = 3;
+                } else if (c == "e") {
+                    doEllipses = true;
+                } else if (c == "w") {
+                    convertQuot = true;
+                } else {
                     // Unknown attribute option, ignore.
                 }
             }
@@ -173,85 +176,85 @@ public class SmartyPantsProcessor {
         List<HTMLToken> tokens = (List<HTMLToken>) text.tokenizeHTML();
         String result = "";
 
-        boolean in_pre = false;  // Keep track of when we're inside <pre> or <code> tags.
-
-        String prev_token_last_char = "";     // This is a cheat, used to get some context
+        boolean inPre = false;  // Keep track of when we're inside <pre> or <code> tags.
+        String prevTokenLastChar = "";  // This is a cheat, used to get some context
                                         // for one-character tokens that consist of
                                         // just a quote char. What we do is remember
                                         // the last character of the previous text
                                         // token, to use as context to curl single-
                                         // character quote tokens correctly.
 
-        for (HTMLToken curr_token : tokens) {
-            if (curr_token.isTag()) {
+        for (HTMLToken token : tokens) {
+            if (token.isTag()) {
                 // Don't mess with quotes inside tags.
-                result += curr_token.getText();
+                result += token.getText();
 
-                Pattern p = Pattern.compile("@"+TAGS_TO_SKIP+"@");
-                Matcher m = p.matcher(curr_token.getText());
+                Pattern p = Pattern.compile("@" + TAGS_TO_SKIP + "@");
+                Matcher m = p.matcher(token.getText());
                 if (m.matches()) {
                     //$in_pre = isset($matches[1]) && $matches[1] == '/' ? 0 : 1;
                 }
 
             } else {
-                String t = curr_token.getText();
-                String last_char = t.substring(t.length()); // Remember last char of this token before processing.
-                if (! in_pre) {
+                String t = token.getText();
+                String lastChar = t.substring(t.length()); // Remember last char of this token before processing.
+                if (!inPre) {
                     t = processEscapes(t);
 
-                    if (convert_quot) {
+                    if (convertQuot) {
                         t = t.replaceAll("/&quot;/", "\"");
                     }
 
-                    if (do_dashes > 0) {
-                        if (do_dashes == 1) t = educateDashes(t);
-                        if (do_dashes == 2) t = educateDashesOldSchool(t);
-                        if (do_dashes == 3) t = educateDashesOldSchoolInverted(t);
+                    if (doDashes > 0) {
+                        if (doDashes == 1) { t = educateDashes(t);  }
+                        if (doDashes == 2) { t = educateDashesOldSchool(t); }
+                        if (doDashes == 3) { t = educateDashesOldSchoolInverted(t); }
                     }
 
-                    if (do_ellipses) t = educateEllipses(t);
+                    if (doEllipses) {
+                        t = educateEllipses(t);
+                    }
 
                     // Note: backticks need to be processed before quotes.
-                    if (do_backticks > 0) {
+                    if (doBackticks > 0) {
                         t = educateBackticks(t);
-                        if (do_backticks == 2) t = educateSingleBackticks(t);
+                        if (doBackticks == 2) {
+                            t = educateSingleBackticks(t);
+                        }
                     }
 
-                    if (do_quotes) {
+                    if (doQuotes) {
                         if (t == "'") {
                             // Special case: single-character ' token
-                            if (prev_token_last_char.matches("/S/")) { // \S
+                            if (prevTokenLastChar.matches("/S/")) { // \S
                                 t = "&#8217;";
-                            }
-                            else {
+                            } else {
                                 t = "&#8216;";
                             }
-                        }
-                        else if (t == "\"") {
+                        } else if (t == "\"") {
                             // Special case: single-character " token
-                            if (prev_token_last_char.matches("/S/")) { // \S
+                            if (prevTokenLastChar.matches("/S/")) { // \S
                                 t = "&#8221;";
-                            }
-                            else {
+                            } else {
                                 t = "&#8220;";
                             }
-                        }
-                        else {
+                        } else {
                             // Normal case:
                             t = educateQuotes(t);
                         }
                     }
 
-                    if (do_stupefy) t = stupefyEntities(t);
+                    if (doStupefy) {
+                        t = stupefyEntities(t);
+                    }
                 }
-                prev_token_last_char = last_char;
+                prevTokenLastChar = lastChar;
                 result += t;
             }
         }
 
         return result;
     }
-
 
     /**
      * @param txt text to be parsed
@@ -267,23 +270,23 @@ public class SmartyPantsProcessor {
             attr = DEFAULT_OPTION;
         }
 
-        boolean do_backticks; //  # should we educate ``backticks'' -style quotes?
+        boolean doBackticks; //  # should we educate ``backticks'' -style quotes?
 
         if (attr == "0") {
             // do nothing;
             return txt;
         } else if (attr == "2") {
             // smarten ``backticks'' -style quotes
-            do_backticks = true;
+            doBackticks = true;
         } else {
-            do_backticks = false;
+            doBackticks = false;
         }
         // Special case to handle quotes at the very end of text when preceded by
         // an HTML tag. Add a space to give the quote education algorithm a bit of
         // context, so that it can guess correctly that it's a closing quote:
-        boolean add_extra_space = false;
+        boolean addExtraSpace = false;
         if (txt.matches("/>['\"]\\z/")) {
-            add_extra_space = true; // Remember, so we can trim the extra space later.
+            addExtraSpace = true; // Remember, so we can trim the extra space later.
             txt += " ";
         }
 
@@ -291,7 +294,7 @@ public class SmartyPantsProcessor {
         List<HTMLToken> tokens = (List<HTMLToken>) text.tokenizeHTML();
         String result = "";
 
-        boolean in_pre = false;  // Keep track of when we're inside <pre> or <code> tags
+        boolean inPre = false;  // Keep track of when we're inside <pre> or <code> tags
 
         // for one-character tokens that consist of
         // just a quote char. What we do is remember
@@ -300,36 +303,36 @@ public class SmartyPantsProcessor {
         // character quote tokens correctly.
 
         // Keep track of when we're inside <pre> or <code> tags
-        String prev_token_last_char = "";
-        for (HTMLToken curr_token : tokens) {
-            if (curr_token.isTag()) {
+        String prevTokenLastChar = "";
+        for (HTMLToken token : tokens) {
+            if (token.isTag()) {
                 // Don't mess with quotes inside tags
-                result += curr_token.getText();
+                result += token.getText();
 
                 Pattern p = Pattern.compile("@" + TAGS_TO_SKIP + "@");
-                Matcher m = p.matcher(curr_token.getText());
+                Matcher m = p.matcher(token.getText());
                 if (m.matches()) {
                     //$in_pre = isset($matches[1]) && $matches[1] == '/' ? 0 : 1;
                 }
             } else {
-                String t = curr_token.getText();
-                String last_char = t.substring(t.length()); // Remember last char of this token before processing.
-                if (!in_pre) {
+                String t = token.getText();
+                String lastChar = t.substring(t.length()); // Remember last char of this token before processing.
+                if (!inPre) {
                     t = processEscapes(t);
-                    if (do_backticks) {
+                    if (doBackticks) {
                         t = educateBackticks(t);
                     }
 
                     if (t == "'") {
                         // Special case: single-character ' token
-                        if (prev_token_last_char.matches("/S/")) {
+                        if (prevTokenLastChar.matches("/S/")) {
                             t = "&#8217;";
                         } else {
                             t = "&#8216;";
                         }
                     } else if (t == "\"") {
                         // Special case: single-character " token
-                        if (prev_token_last_char.matches("/S/")) {
+                        if (prevTokenLastChar.matches("/S/")) {
                             t = "&#8221;";
                         } else {
                             t = "&#8220;";
@@ -340,13 +343,13 @@ public class SmartyPantsProcessor {
                     }
 
                 }
-                prev_token_last_char = last_char;
+                prevTokenLastChar = lastChar;
                 result += t;
             }
         }
 
-        if (add_extra_space) {
-            result.replace("/ z/", ""); // / \z/
+        if (addExtraSpace) {
+            result.replace("/ \\z/", "");
         }
         return result;
     }
@@ -366,52 +369,52 @@ public class SmartyPantsProcessor {
         }
 
         // reference to the subroutine to use for dash education, default to educateDashes:
-        String dash_sub_ref = "EducateDashes";
+        String dashMethodName = "EducateDashes";
 
         if (attr == "0") {
             // do nothing;
-            return txt; // TODO: or txt??
+            return txt;
         } else if (attr == "2") {
             // use old smart dash shortcuts, "--" for en, "---" for em
-            dash_sub_ref = "EducateDashesOldSchool";
+            dashMethodName = "EducateDashesOldSchool";
         } else if (attr == "3") {
             // inverse of 2, "--" for em, "---" for en
-            dash_sub_ref = "EducateDashesOldSchoolInverted";
+            dashMethodName = "EducateDashesOldSchoolInverted";
         }
 
         TextEditor text = new TextEditor(txt);
         List<HTMLToken> tokens = (List<HTMLToken>) text.tokenizeHTML();
 
         String result = "";
-        boolean in_pre = false;  // Keep track of when we're inside <pre> or <code> tags
+        boolean inPre = false;  // Keep track of when we're inside <pre> or <code> tags
 
-        for (HTMLToken curr_token : tokens) {
-            if (curr_token.isTag()) {
+        for (HTMLToken token : tokens) {
+            if (token.isTag()) {
                 // Don't mess with quotes inside tags
-                result += curr_token.getText();
+                result += token.getText();
 
                 Pattern p = Pattern.compile("@" + TAGS_TO_SKIP + "@");
-                Matcher m = p.matcher(curr_token.getText());
+                Matcher m = p.matcher(token.getText());
                 if (m.matches()) {
                     //$in_pre = isset($matches[1]) && $matches[1] == '/' ? 0 : 1;
                 }
 
             } else {
-                String t = curr_token.getText();
-                if (!in_pre) {
+                String t = token.getText();
+                if (!inPre) {
                     t = processEscapes(t);
 
                     // XXX: Reflection is an ugly-hack just to be PHP-like.
-                    java.lang.reflect.Method sub_method = null;
+                    java.lang.reflect.Method dashMethod = null;
                     try {
-                        sub_method = SmartyPantsProcessor.class.getMethod(dash_sub_ref);
+                        dashMethod = SmartyPantsProcessor.class.getMethod(dashMethodName);
                     } catch (NoSuchMethodException ex) {
                         Logger.getLogger(SmartyPantsProcessor.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (SecurityException ex) {
                         Logger.getLogger(SmartyPantsProcessor.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     try {
-                        t = (String) sub_method.invoke(t);
+                        t = (String) dashMethod.invoke(t);
                     } catch (IllegalAccessException ex) {
                         Logger.getLogger(SmartyPantsProcessor.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IllegalArgumentException ex) {
@@ -450,22 +453,22 @@ public class SmartyPantsProcessor {
         List<HTMLToken> tokens = (List<HTMLToken>) text.tokenizeHTML();
 
         String result = "";
-        boolean in_pre = false;  // Keep track of when we're inside <pre> or <code> tags
+        boolean inPre = false;  // Keep track of when we're inside <pre> or <code> tags
 
-        for (HTMLToken curr_token : tokens) {
-            if (curr_token.isTag()) {
+        for (HTMLToken token : tokens) {
+            if (token.isTag()) {
                 // Don't mess with quotes inside tags
-                result += curr_token.getText();
+                result += token.getText();
 
                 Pattern p = Pattern.compile("@" + TAGS_TO_SKIP + "@");
-                Matcher m = p.matcher(curr_token.getText());
+                Matcher m = p.matcher(token.getText());
                 if (m.matches()) {
                     //$in_pre = isset($matches[1]) && $matches[1] == '/' ? 0 : 1;
                 }
 
             } else {
-                String t = curr_token.getText();
-                if (!in_pre) {
+                String t = token.getText();
+                if (!inPre) {
                     t = processEscapes(t);
                     t = educateEllipses(t);
                 }
@@ -489,12 +492,12 @@ public class SmartyPantsProcessor {
         // Make our own "punctuation" character class, because the POSIX-style
         // [:PUNCT:] is only available in Perl 5.6 or later:
         // ("[!\"#\\$\\%'()*+,-.\\/:;<=>?\\@\\[\\\\\]\\^_`{|}~]");
-        Pattern punct_class = Pattern.compile("\\p{Punct}");
+        String punctClass = "\\p{Punct}";
 
         // Special case if the very first character is a quote
         // followed by punctuation at a non-word-break. Close the quotes by brute force:
-        str = str.replaceAll("/^'(?=$punct_class\\B)/", "&#8217;");     // TODO: include punct_clas
-        str = str.replaceAll("/^\"(?=$punct_class\\B)/", "&#8221;");    // TODO: ditto
+        str = str.replaceAll("/^'(?=" + punctClass + "\\B)/", "&#8217;");
+        str = str.replaceAll("/^\"(?=" + punctClass + "\\B)/", "&#8221;");
 
         // Special case for double sets of quotes, e.g.:
         //   <p>He said, "'Quoted' words in a larger quote."</p>
@@ -504,32 +507,32 @@ public class SmartyPantsProcessor {
         // Special case for decade abbreviations (the '80s):
         str = str.replaceAll("/'(?=\\d{2}s)/", "&#8217;");
 
-        String close_class = "[^\\ \t\r\n\\[\\{\\(\\-]";
-        String dec_dashes = "&\\#8211;|&\\#8212;";
+        String closeClass = "[^\\ \t\r\n\\[\\{\\(\\-]";
+        String decDashes = "&\\#8211;|&\\#8212;";
 
         // Get most opening single quotes:
         str = str.replaceAll("{" +
-            "(" +
-                "\\s          |" +  // a whitespace char, or
+                "(" +
+                "\\s          |" + // a whitespace char, or
                 "&nbsp;      | " + // a non-breaking space entity, or
                 "--          | " + // dashes, or
                 "&[mn]dash;  | " + // named dash entities
-                dec_dashes + " |  " + // or decimal entities
-                "&\\#x201[34]; |"+   // or hex
-            ")" +
-            "'" +                  // the quote
-            "(?=\\w)" +              // followed by a word character
-            "}x", "\\1&#8216;");
+                decDashes + " |  " + // or decimal entities
+                "&\\#x201[34]; |" + // or hex
+                ")" +
+                "'" + // the quote
+                "(?=\\w)" + // followed by a word character
+                "}x", "\\1&#8216;");
         // Single closing quotes:
         str = str.replaceAll("{" +
-            "("+close_class+")?" +
-            "'" +
-            "(?(1)|" +          // If $1 captured, then do nothing;
-              "(?=\\s | s\\b)" +  // otherwise, positive lookahead for a whitespace
-            ")"+               // char or an 's' at a word ending position. This
-                            // is a special case to handle something like:
-                            // \"<i>Custer</i>'s Last Stand.\"
-            "}xi", "\\1&#8217;");
+                "(" + closeClass + ")?" +
+                "'" +
+                "(?(1)|" + // If $1 captured, then do nothing;
+                "(?=\\s | s\\b)" + // otherwise, positive lookahead for a whitespace
+                ")" + // char or an 's' at a word ending position. This
+                // is a special case to handle something like:
+                // \"<i>Custer</i>'s Last Stand.\"
+                "}xi", "\\1&#8217;");
 
         // Any remaining single quotes should be opening ones:
         str = str.replaceAll("'", "&#8216;");
@@ -537,25 +540,25 @@ public class SmartyPantsProcessor {
         // Get most opening double quotes:
         str = str.replace("{" +
                 "(" +
-                "\\s         |"+   // a whitespace char, or
-                "&nbsp;      |"+   // a non-breaking space entity, or
-                "--          |"+   // dashes, or
-                "&[mn]dash;  |"+   // named dash entities
-                dec_dashes + " |"+   // or decimal entities
-               "&\\#x201[34];" +  // or hex
-            ")" +
-               " \"" +                  // the quote
-            "(?=\\w) "+              // followed by a word character
-          "}x",
-          "\\1&#8220;");
+                "\\s         |" + // a whitespace char, or
+                "&nbsp;      |" + // a non-breaking space entity, or
+                "--          |" + // dashes, or
+                "&[mn]dash;  |" + // named dash entities
+                decDashes + " |" + // or decimal entities
+                "&\\#x201[34];" + // or hex
+                ")" +
+                " \"" + // the quote
+                "(?=\\w) " + // followed by a word character
+                "}x",
+                "\\1&#8220;");
 
         // Double closing quotes:
-        str = str.replace("{"+
-              "("+close_class+")?"+
+        str = str.replace("{" +
+                "(" + closeClass + ")?" +
                 "\"" +
-            "(?(1)|(?=\\s))"+   // If $1 captured, then do nothing;
-                             // if not, then make sure the next char is whitespace.
-            "}x", "\\1&#8221;");
+                "(?(1)|(?=\\s))" + // If $1 captured, then do nothing;
+                // if not, then make sure the next char is whitespace.
+                "}x", "\\1&#8221;");
 
         // Any remaining quotes should be opening ones.
         str = str.replace("\"", "&#8220;");
@@ -708,5 +711,4 @@ public class SmartyPantsProcessor {
     public String toString() {
         return "SmartyPants Processor for Java 0.1.0 (compatible with SmartyPants 1.5.1)";
     }
-
 }
