@@ -39,7 +39,7 @@ software, even if advised of the possibility of such damage.
 
     <groupId>org.markdownj</groupId>
     <artifactId>markdownj</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <version>0.4-SNAPSHOT</version>
 
     <name>markdownj</name>
@@ -181,13 +181,12 @@ software, even if advised of the possibility of such damage.
     </repositories>
 
     <build>
-        <sourceDirectory>src/java/</sourceDirectory>
+
         <testResources>
             <testResource>
                 <directory>tests/</directory>
             </testResource>
         </testResources>
-        <testSourceDirectory>test/java/</testSourceDirectory>
 
         <extensions>
             <extension>
@@ -252,12 +251,6 @@ software, even if advised of the possibility of such damage.
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.ant</groupId>
-            <artifactId>ant</artifactId>
-            <version>${ant.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
@@ -266,9 +259,14 @@ software, even if advised of the possibility of such damage.
         </dependency>
     </dependencies>
 
+    <modules>
+        <module>core</module>
+        <module>ant-utils</module>
+    </modules>
+
     <properties>
-        <ant.version>1.7.1</ant.version>
         <junit.version>4.5</junit.version>
+        <ant.version>1.7.1</ant.version>
     </properties>
 
 </project>
