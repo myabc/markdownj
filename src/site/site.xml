@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MarkdownJ">
+    <bannerLeft>
+        <name>MarkdownJ</name>
+        <!--<src>http://markdownj.org/</src>-->
+        <href>http://markdownj.org/</href>
+    </bannerLeft>
+    <publishDate format="dd MMM yyyy"/>
+    <skin>
+        <groupId>org.apache.tapestry</groupId>
+        <artifactId>maven-skin</artifactId>
+        <version>1.1</version>
+    </skin>
+    <body>
+        <links>
+            <item name="Markdown" href="http://daringfireball.net/projects/markdown/"/>
+        </links>
+
+        <menu name="MarkdownJ">
+            <!--item name="APT Format" href="format.html"-->
+            <item name="FAQ" href="faq.html"/>
+        </menu>
+
+        <menu ref="modules"/>
+        ${reports}
+    </body>
+</project>

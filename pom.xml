@@ -43,7 +43,7 @@ software, even if advised of the possibility of such damage.
     <version>0.4-SNAPSHOT</version>
 
     <name>markdownj</name>
-    <!--<url></url>-->
+    <url>http://markdownj.org/</url>
     <description>MarkdownJ is the pure Java port of Markdown, a text-to-html conversion tool written by John Gruber.</description>
 
     <developers>
@@ -90,8 +90,15 @@ software, even if advised of the possibility of such damage.
 
     <scm>
         <connection>scm:git:git://github.com/myabc/markdownj.git</connection>
-        <url>scm:git:git://github.com/myabc/markdownj.git</url>
+        <developerConnection>scm:git:git@github.com:myabc/markdownj.git</developerConnection>
+        <url>http://github.com/myabc/markdownj/</url>
+        <tag>master</tag>
     </scm>
+
+    <issueManagement>
+        <system>Google Code</system>
+        <url>http://code.google.com/p/markdownj/issues</url>
+    </issueManagement>
 
     <distributionManagement>
         <repository>
@@ -134,6 +141,31 @@ software, even if advised of the possibility of such damage.
             </comments>
         </license>
     </licenses>
+
+    <ciManagement/>
+
+    <mailingLists>
+        <mailingList>
+            <name>markdownj</name>
+            <post>markdownj@googlegroups.com</post>
+            <subscribe>markdownj-subscribe@googlegroups.com</subscribe>
+            <unsubscribe>markdownj-unsubscribe@googlegroups.com</unsubscribe>
+            <archive>http://groups.google.com/group/markdownj</archive>
+            <otherArchives>
+                <otherArchive>http://www.mail-archive.com/markdownj@googlegroups.com/</otherArchive>
+            </otherArchives>
+        </mailingList>
+        <mailingList>
+            <name>markdown-discuss</name>
+            <post>markdown-discuss@six.pairlist.net</post>
+            <subscribe>markdown-discuss-subscribe@six.pairlist.net</subscribe>
+            <unsubscribe>markdown-discuss-unsubscribe@six.pairlist.net</unsubscribe>
+            <archive>http://six.pairlist.net/pipermail/markdown-discuss/</archive>
+            <otherArchives>
+                <otherArchive>http://www.mail-archive.com/markdown-discuss@six.pairlist.net/</otherArchive>
+            </otherArchives>
+        </mailingList>
+    </mailingLists>
 
     <repositories>
         <repository>
@@ -195,6 +227,12 @@ software, even if advised of the possibility of such damage.
                     <source>1.5</source>
                     <target>1.5</target>
                     <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <locales>en</locales>
                 </configuration>
             </plugin>
             <plugin>

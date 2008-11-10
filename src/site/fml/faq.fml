@@ -1,0 +1,10 @@
+<faqs id="faqs1">
+  <part id="part1">
+    <faq id="faq1">
+      <question>What is MarkdownJ?</question>
+      <answer>
+        <p>MarkdownJ is a pure Java port of Markdown.</p>
+      </answer>
+    </faq>
+  </part>
+</faqs>
