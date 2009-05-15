@@ -1,7 +1,0 @@
-#set ($title = "Martian Software - MarkdownJ License")
-#set ($cur_submenu_id = "license")
-#parse ("startpage.vsl")
-#parse ("submenu.vsl")
-<h1>MarkdownJ License</h1>
-#parse("bsdlicense.vsl")
-#parse("endpage.vsl")

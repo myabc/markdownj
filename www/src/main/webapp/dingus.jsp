@@ -325,9 +325,9 @@ Markdown Source:<br>
 
 <% if (markup != null) {
     String html = mp.markdown(markup);
-    java.io.FileWriter log = new java.io.FileWriter("/home/www/markdown/log/" + System.currentTimeMillis() + ".log");
-    log.write(markup);
-    log.close();
+    //java.io.FileWriter log = new java.io.FileWriter("/home/www/markdown/log/" + System.currentTimeMillis() + ".log");
+    //log.write(markup);
+    //log.close();
 %>
 HTML Source:<br>
 <textarea name="html" cols="80" rows="25" style="font-family: Monaco, ProFont, monospace; font-size: 10px;" readonly="readonly"><%= html %></textarea>
