@@ -172,7 +172,8 @@
 
 <div id="sidebar">
 <h1>MarkdownJ Dingus</h1>
-<p>(shamelessly stolen from <a href="http://daringfireball.net/projects/markdown/dingus">Markdown</a>).  Download source etc. as a <a href="MarkdownJ-0.1.0.zip">ZIP file</a></p>
+<p>(shamelessly stolen from <a href="http://daringfireball.net/projects/markdown/dingus">Markdown</a>).
+    Download source and binaries from <a href="http://code.google.com/p/markdownj/downloads/list">Google Code</a></p>
 
 <h2>Syntax Cheatsheet:</h2>
 
