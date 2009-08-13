@@ -1,9 +1,4 @@
 .DS_Store
-bin
-dist
-rpt
-junit*.properties
 nbproject/private
 profiles.xml
 target
-test/java/com/petebevin/markdown/test/*.class
