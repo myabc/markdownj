@@ -1,4 +1,8 @@
 .DS_Store
+.classpath
+.project
+.settings
+_site
 nbproject/private
 profiles.xml
 target
