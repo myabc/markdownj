@@ -41,4 +41,3 @@ Authors
 Contact
 -------
  * Alex Coles (alex@alexcolesportfolio.com)
-
