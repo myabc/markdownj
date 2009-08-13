@@ -419,9 +419,9 @@ public class MarkdownProcessor {
                     String listType = "";
 
                     if (listStart.matches("[*+-]")) {
-                    	listType = "ul";
+                     listType = "ul";
                     } else {
-                    	listType = "ol";
+                     listType = "ol";
                     }
 
                     // Turn double returns into triple returns, so that we can make a
@@ -455,9 +455,9 @@ public class MarkdownProcessor {
                     String listType = "";
 
                     if (listStart.matches("[*+-]")) {
-                    	listType = "ul";
+                     listType = "ul";
                     } else {
-                    	listType = "ol";
+                     listType = "ol";
                     }
 
                     // Turn double returns into triple returns, so that we can make a
@@ -745,7 +745,7 @@ public class MarkdownProcessor {
                     replacementText = wholeMatch;
                 }
                 return replacementText;
-        	}
+         }
         });
 
         return markup;

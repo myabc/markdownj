@@ -1,5 +1,5 @@
 <%@ page language="java" import="com.petebevin.markdown.MarkdownProcessor" %>
-<% 
+<%
     MarkdownProcessor mp = new MarkdownProcessor();
     String markup = request.getParameter("markup");
 %>
@@ -7,39 +7,39 @@
 <head>
 <title>MarkdownJ - Markdown in Java</title>
 <style type="text/css">
-        #sidebar h1 {   
+        #sidebar h1 {
                 font-size: 1.5em;
                 font-weight: bold;
         }
-        #sidebar h2 {   
+        #sidebar h2 {
                 font-size: 1.2em;
                 font-weight: bold;
                 margin-bottom: -.5em;
         }
-        #sidebar h3 {   
+        #sidebar h3 {
                 font-size: 1em;
                 font-weight: bold;
                 text-transform: none;
                 margin-bottom: .25em;
                 margin-top: 1.5em;
         }
-        #sidebar code { 
+        #sidebar code {
                 font-family: Monaco, ProFont, "Andale Mono", "Lucida Console", Courier, monospace;
                 font-size: 10px;
         }
-        #sidebar pre {  
+        #sidebar pre {
                 line-height: 12px;
                 margin-top: 0;
                 background-color: #f5f5f5;
                 border: 1px solid #ccc;
                 padding: 4px;
         }
-        #sidebar p {    
+        #sidebar p {
                 margin-top: 0;
                 margin-bottom: 0;
         }
-        
-        body {  
+
+        body {
                 background-color: #eee;
                 font-family: "Lucida Grande", Verdana, sans-serif;
                 font-size: 11px;
@@ -50,14 +50,14 @@
                 margin-bottom: 4px;
         }
 
-        #container {    
+        #container {
                 border: 0px solid gray;
                 margin: 10px;
                 margin-left: auto;
                 margin-right: auto;
                 padding: 0px;
                 min-width: 750px;
-                
+
                 /* Serve up some shit for Win/IE: */
                 width:expression("800px" );
                 margin-left:expression("0");
@@ -69,7 +69,7 @@
                 background-color: transparent;
         }
 
-        #app {  
+        #app {
                 padding: 0 10px 0 10px;
                 margin-right: 270px;
                 background-color: transparent;
@@ -89,7 +89,7 @@
                 margin-top: 100px;
         }
 
-        #buttonrow {    
+        #buttonrow {
                 margin-top: 10px;
                 margin-bottom: 60px;
         }
@@ -100,10 +100,10 @@
 
         textarea[name="markdown"], textarea[name="xhtml"] {
         /* WinIE is fucking retarded. Thanks to Sam Ruby for the workaround:
-                http://www.intertwingly.net/blog/1432.html */   
+                http://www.intertwingly.net/blog/1432.html */
                 width: 98%;
-        }       
-        
+        }
+
         #ProjectSubmenu {
                 list-style: none outside;
                 padding: 0;
@@ -111,14 +111,14 @@
                 height: 4em; /* Setting a height makes it act like a block */
                 border: 0px dotted gray;
         }
-        
+
         #ProjectSubmenu li {
                 display: inline;
                 padding: 0;
                 margin: 0;
         }
-        
-        
+
+
         #ProjectSubmenu li a,
         #ProjectSubmenu li a:link,
         #ProjectSubmenu li a:visited {
@@ -136,23 +136,23 @@
                 border-width: 1px;
                 border-style: solid;
         }
-        
+
         #ProjectSubmenu li a.selected,
         #ProjectSubmenu li a.selected:hover {
                 background: #999;
                 color: white;
         }
-        
+
         #ProjectSubmenu li a:hover {
                 background-color: #ccc;
         }
-        
+
         #ProjectSubmenu li a:active {
                 color: #eee;
                 background: #bbb;
         }
-        
-        .renderbox {    
+
+        .renderbox {
                 background: #EEE;
                 font-family: Georgia, serif;
                 font-size: 13px;
@@ -271,7 +271,7 @@ Header 2
 &gt; &gt; And, they can be nested.
 
 &gt; #### Headers in blockquotes
-&gt; 
+&gt;
 &gt; * You can quote a list.
 &gt; * Etc.
 </code></pre>
@@ -310,7 +310,7 @@ like `` `this` ``.
 
 <p>End a line with two or more spaces:</p>
 
-<pre><code>Roses are red,   
+<pre><code>Roses are red,
 Violets are blue.
 </code></pre>
 </div> <!-- sidebar -->
