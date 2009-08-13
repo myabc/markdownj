@@ -47,8 +47,8 @@ software, even if advised of the possibility of such damage.
     <packaging>jar</packaging>
 
     <artifactId>markdownj-ant-utils</artifactId>
-    <name>ant-utils</name>
-    <description></description>
+    <name>MarkdownJ Ant Utils</name>
+    <description>Utilities for using MarkdownJ with Apache Ant build tool.</description>
 
     <dependencies>
         <dependency>

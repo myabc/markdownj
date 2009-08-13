@@ -47,8 +47,8 @@ software, even if advised of the possibility of such damage.
     <packaging>jar</packaging>
 
     <artifactId>markdownj-core</artifactId>
-    <name>core</name>
-    <description></description>
+    <name>MarkdownJ Core</name>
+    <description>Core functionality provided by MarkdownJ.</description>
 
     <build>
         <plugins>
