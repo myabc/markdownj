@@ -43,6 +43,8 @@ import junit.framework.TestSuite;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLDecoder;
 
 public class MarkdownTestTester extends TestCase {
     String test;
@@ -56,13 +58,14 @@ public class MarkdownTestTester extends TestCase {
 
     public static Test suite() {
         TestSuite suite = new TestSuite("MarkdownTest");
-        suite.addTest(newSuite("tests/MarkdownTest"));
+        suite.addTest(newSuite("/MarkdownTest"));
         return suite;
     }
 
     public static Test newSuite(String dirName) {
         TestSuite suite = new TestSuite("MarkdownProcessor file " + dirName);
-        File dir = new File(dirName);
+        URL fileUrl = MarkdownTestTester.class.getResource(dirName);
+        File dir = new File(fileUrl.getFile());
         File[] dirEntries = dir.listFiles();
 
         for (int i = 0; i < dirEntries.length; i++) {
@@ -79,14 +82,16 @@ public class MarkdownTestTester extends TestCase {
 
     @Override
     public void runTest() throws IOException {
-        String testText = slurp(new File(dir, test + ".text"));
-        String htmlText = slurp(new File(dir, test + ".html"));
+        String testText = slurp(dir + File.separator + test + ".text");
+        String htmlText = slurp(dir + File.separator + test + ".html");
         MarkdownProcessor markup = new MarkdownProcessor();
         String markdownText = markup.markdown(testText);
         assertEquals(test, htmlText.trim(), markdownText.trim());
     }
 
-    private String slurp(File file) throws IOException {
+    private String slurp(String fileName) throws IOException {
+        URL fileUrl = this.getClass().getResource(fileName);
+        File file = new File(URLDecoder.decode(fileUrl.getFile(), "UTF-8"));
         FileReader in = new FileReader(file);
         StringBuffer sb = new StringBuffer();
         int ch;

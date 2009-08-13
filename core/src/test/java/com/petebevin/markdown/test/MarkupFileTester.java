@@ -43,6 +43,7 @@ import junit.framework.TestSuite;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,16 +57,17 @@ public class MarkupFileTester extends TestCase {
 
     public static Test suite() throws IOException {
         TestSuite suite = new TestSuite("Test files");
-        suite.addTest(newSuite("tests/dingus.txt"));
-        suite.addTest(newSuite("tests/paragraphs.txt"));
-        suite.addTest(newSuite("tests/snippets.txt"));
-        suite.addTest(newSuite("tests/lists.txt"));
+        suite.addTest(newSuite("/dingus.txt"));
+        suite.addTest(newSuite("/paragraphs.txt"));
+        suite.addTest(newSuite("/snippets.txt"));
+        suite.addTest(newSuite("/lists.txt"));
         return suite;
     }
 
     public static Test newSuite(String filename) throws IOException {
         TestSuite suite = new TestSuite("Markdown file " + filename);
-        FileReader file = new FileReader(filename);
+        URL fileUrl = MarkupFileTester.class.getResource(filename);
+        FileReader file = new FileReader(fileUrl.getFile());
         BufferedReader in = new BufferedReader(file);
         StringBuffer test = null;
         StringBuffer result = null;
