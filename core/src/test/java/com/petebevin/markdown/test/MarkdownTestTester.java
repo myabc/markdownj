@@ -36,35 +36,33 @@ software, even if advised of the possibility of such damage.
 package com.petebevin.markdown.test;
 
 import com.petebevin.markdown.MarkdownProcessor;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+import static org.junit.Assert.*;
 
-public class MarkdownTestTester extends TestCase {
+@RunWith(value = Parameterized.class)
+public class MarkdownTestTester {
+
+    private final static String MARKDOWN_TEST_DIR = "/MarkdownTest";
+
     String test;
     String dir;
 
-    public MarkdownTestTester(String dir, String test) {
-        super(test);
-        this.test = test;
-        this.dir = dir;
-    }
-
-    public static Test suite() {
-        TestSuite suite = new TestSuite("MarkdownTest");
-        suite.addTest(newSuite("/MarkdownTest"));
-        return suite;
-    }
-
-    public static Test newSuite(String dirName) {
-        TestSuite suite = new TestSuite("MarkdownProcessor file " + dirName);
-        URL fileUrl = MarkdownTestTester.class.getResource(dirName);
+    @Parameters
+    public static Collection<Object[]> markdownTests() {
+        List list = new ArrayList<Object[]>();
+        URL fileUrl = MarkdownTestTester.class.getResource(MARKDOWN_TEST_DIR);
         File dir = new File(fileUrl.getFile());
         File[] dirEntries = dir.listFiles();
 
@@ -73,14 +71,19 @@ public class MarkdownTestTester extends TestCase {
             String fileName = dirEntry.getName();
             if (fileName.endsWith(".text")) {
                 String testName = fileName.substring(0, fileName.lastIndexOf('.'));
-                suite.addTest(new MarkdownTestTester(dirName, testName));
+                list.add(new Object[]{MARKDOWN_TEST_DIR, testName});
             }
         }
 
-        return suite;
+        return list;
     }
 
-    @Override
+    public MarkdownTestTester(String dir, String test) {
+        this.test = test;
+        this.dir = dir;
+    }
+
+    @Test
     public void runTest() throws IOException {
         String testText = slurp(dir + File.separator + test + ".text");
         String htmlText = slurp(dir + File.separator + test + ".html");

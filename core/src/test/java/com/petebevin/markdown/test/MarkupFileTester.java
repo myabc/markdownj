@@ -36,36 +36,54 @@ software, even if advised of the possibility of such damage.
 package com.petebevin.markdown.test;
 
 import com.petebevin.markdown.MarkdownProcessor;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+import static org.junit.Assert.*;
 
-public class MarkupFileTester extends TestCase {
+@RunWith(value = Parameterized.class)
+public class MarkupFileTester {
+
+    private final static String[] TEST_FILENAMES = new String[] {
+        "/dingus.txt",
+        "/paragraphs.txt",
+        "/snippets.txt",
+        "/lists.txt"
+    };
+
     TestResultPair pair;
 
+    @Parameters
+    public static Collection<Object[]> testResultPairs() throws IOException {
+        List<TestResultPair> fullResultPairList = new ArrayList<TestResultPair>();
+        for (String filename : TEST_FILENAMES) {
+            fullResultPairList.addAll(newTestResultPairList(filename));
+        }
+
+        Collection<Object[]> testResultPairs = new ArrayList<Object[]>();
+        for (TestResultPair p : fullResultPairList) {
+            testResultPairs.add(new Object[] { p });
+        }
+        return testResultPairs;
+    }
+
     public MarkupFileTester(TestResultPair pair) {
-        super(pair.toString());
         this.pair = pair;
     }
 
-    public static Test suite() throws IOException {
-        TestSuite suite = new TestSuite("Test files");
-        suite.addTest(newSuite("/dingus.txt"));
-        suite.addTest(newSuite("/paragraphs.txt"));
-        suite.addTest(newSuite("/snippets.txt"));
-        suite.addTest(newSuite("/lists.txt"));
-        return suite;
-    }
-
-    public static Test newSuite(String filename) throws IOException {
-        TestSuite suite = new TestSuite("Markdown file " + filename);
+    public static List<TestResultPair> newTestResultPairList(String filename) throws IOException {
+        List<TestResultPair> list = new ArrayList<TestResultPair>();
         URL fileUrl = MarkupFileTester.class.getResource(filename);
         FileReader file = new FileReader(fileUrl.getFile());
         BufferedReader in = new BufferedReader(file);
@@ -86,7 +104,7 @@ public class MarkupFileTester extends TestCase {
             Matcher mResult = pResult.matcher(line);
 
             if (mTest.matches()) { // # Test
-                addTest(suite, test, result, testNumber, testName);
+                addTestResultPair(list, test, result, testNumber, testName);
                 testNumber = mTest.group(1);
                 testName = mTest.group(2);
                 test = new StringBuffer();
@@ -108,12 +126,12 @@ public class MarkupFileTester extends TestCase {
             }
         }
 
-        addTest(suite, test, result, testNumber, testName);
+        addTestResultPair(list, test, result, testNumber, testName);
 
-        return suite;
+        return list;
     }
 
-    private static void addTest(TestSuite suite, StringBuffer testbuf, StringBuffer resultbuf, String testNumber, String testName) {
+    private static void addTestResultPair(List list, StringBuffer testbuf, StringBuffer resultbuf, String testNumber, String testName) {
         if (testbuf == null || resultbuf == null) {
             return;
         }
@@ -123,7 +141,7 @@ public class MarkupFileTester extends TestCase {
 
         String id = testNumber + "(" + testName + ")";
 
-        suite.addTest(new MarkupFileTester(new TestResultPair(id, test, result)));
+        list.add(new TestResultPair(id, test, result));
     }
 
     private static String chomp(String s) {
@@ -134,7 +152,7 @@ public class MarkupFileTester extends TestCase {
         return s.substring(0, lastPos + 1);
     }
 
-    @Override
+    @Test
     public void runTest() {
         MarkdownProcessor markup = new MarkdownProcessor();
         assertEquals(pair.toString(), pair.getResult().trim(), markup.markdown(pair.getTest()).trim());
