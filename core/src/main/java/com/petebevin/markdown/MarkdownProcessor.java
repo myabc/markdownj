@@ -796,7 +796,7 @@ public class MarkdownProcessor {
 
     @Override
     public String toString() {
-        return "Markdown Processor for Java 0.3.0 (compatible with Markdown 1.0.2b2)";
+        return "Markdown Processor for Java 0.4.0 (compatible with Markdown 1.0.2b2)";
     }
 
     public static void main(String[] args) {
