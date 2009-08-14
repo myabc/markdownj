@@ -35,28 +35,32 @@ software, even if advised of the possibility of such damage.
 
 package com.petebevin.markdown.test;
 
-import junit.framework.TestCase;
-
 import com.petebevin.markdown.MarkdownProcessor;
 
-public class EscapeSpecialCharsWithinTagAttributes extends TestCase {
-    MarkdownProcessor markdownProcessor;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-    @Override
-    public void setUp() throws Exception {
-        markdownProcessor = new MarkdownProcessor();
+public class EscapeSpecialCharsWithinTagAttributes {
+    MarkdownProcessor m;
+
+    @Before
+    public void createProcessor() {
+        m = new MarkdownProcessor();
     }
 
+    @Test
     public void testImages() {
         String url = "![an *image*](/images/an_image_with_underscores.jpg \"An_image_title\")";
-        String processed = markdownProcessor.markdown(url);
+        String processed = m.markdown(url);
         String output = "<p><img src=\"/images/an_image_with_underscores.jpg\" alt=\"an *image*\" title=\"An_image_title\" /></p>\n";
         assertEquals(output, processed);
     }
 
+    @Test
     public void testAutoLinks() {
         String url = "[a _link_](http://url.com/a_tale_of_two_cities?var1=a_query_&var2=string \"A_link_title\")";
-        String processed = markdownProcessor.markdown(url);
+        String processed = m.markdown(url);
         String output = "<p><a href=\"http://url.com/a_tale_of_two_cities?var1=a_query_&amp;var2=string\" title=\"A_link_title\">a <em>link</em></a></p>\n";
         assertEquals(output, processed);
     }

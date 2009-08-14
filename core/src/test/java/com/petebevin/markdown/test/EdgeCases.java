@@ -36,30 +36,37 @@ software, even if advised of the possibility of such damage.
 package com.petebevin.markdown.test;
 
 import com.petebevin.markdown.MarkdownProcessor;
-import junit.framework.TestCase;
 
 import java.util.regex.Pattern;
 
-public class EdgeCases extends TestCase {
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class EdgeCases {
     private MarkdownProcessor m;
 
-    @Override
-    public void setUp() {
+    @Before
+    public void createProcessor() {
         m = new MarkdownProcessor();
     }
 
+    @Test
     public void testEmptyString() {
         assertEquals("\n", m.markdown(""));
     }
 
+    @Test
     public void testSpaces() {
         assertEquals("\n", m.markdown("  "));
     }
 
+    @Test
     public void testNull() {
         assertEquals("\n", m.markdown(null));
     }
 
+    @Test
     public void testSplitAssumption() {
         // In Perl, split(/x/, "") returns the empty string.
         // But in Java, it's the array { "" }.
@@ -67,6 +74,5 @@ public class EdgeCases extends TestCase {
         String[] xs = x.split("");
         assertEquals (1, xs.length);
         assertEquals("", xs[0]);
-
     }
 }

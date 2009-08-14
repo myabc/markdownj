@@ -37,16 +37,20 @@ package com.petebevin.markdown.test;
 
 import com.petebevin.markdown.HTMLDecoder;
 import com.petebevin.markdown.MarkdownProcessor;
-import junit.framework.TestCase;
 
-public class EmailAddresses extends TestCase {
-    MarkdownProcessor markdownProcessor;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-    @Override
-    public void setUp() throws Exception {
-        markdownProcessor = new MarkdownProcessor();
+public class EmailAddresses {
+    MarkdownProcessor m;
+
+    @Before
+    public void createProcessor() {
+        m = new MarkdownProcessor();
     }
 
+    @Test
     public void testDecoder() {
         String encoded = "&#98;&#105;&#x6C;&#x6C;&#x67;&#64;&#x6D;i&#x63;&#x72;&#x6F;&#115;&#x6F;&#x66;&#116;&#x2E;c&#111;&#109;";
         String billg = "billg@microsoft.com";
@@ -55,8 +59,9 @@ public class EmailAddresses extends TestCase {
         assertEquals("", HTMLDecoder.decode(""));
     }
 
+    @Test
     public void testEmail() {
-        String html = markdownProcessor.markdown("<billg@microsoft.com>");
+        String html = m.markdown("<billg@microsoft.com>");
         String plain = HTMLDecoder.decode(html);
         assertEquals("<p><a href=\"mailto:billg@microsoft.com\">billg@microsoft.com</a></p>\n", plain);
         assertFalse("Email addresses are masked", plain.equals(html));

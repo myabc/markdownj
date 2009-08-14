@@ -36,21 +36,32 @@ software, even if advised of the possibility of such damage.
 package com.petebevin.markdown.test;
 
 import com.petebevin.markdown.MarkdownProcessor;
-import junit.framework.TestCase;
 
-public class LineConventions extends TestCase {
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class LineConventions {
     private static final String EXPECTED = "<p>a\nb\nc</p>\n";
+    private MarkdownProcessor m;
 
-    public void testUnixLineConventions() {
-        MarkdownProcessor markup = new MarkdownProcessor();
-        assertEquals(EXPECTED, markup.markdown("a\nb\nc\n"));
+    @Before
+    public void createProcessor() {
+        m = new MarkdownProcessor();
     }
 
+    @Test
+    public void testUnixLineConventions() {
+        assertEquals(EXPECTED, m.markdown("a\nb\nc\n"));
+    }
+
+    @Test
     public void testWindowsLineConventions() {
         MarkdownProcessor markup = new MarkdownProcessor();
         assertEquals(EXPECTED, markup.markdown("a\r\nb\r\nc\r\n"));
     }
 
+    @Test
     public void testMacLineConventions() {
         MarkdownProcessor markup = new MarkdownProcessor();
         assertEquals(EXPECTED, markup.markdown("a\rb\rc\r"));
