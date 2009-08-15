@@ -110,10 +110,9 @@ public class MarkdownProcessor {
     }
 
     private TextEditor encodeEscapes(TextEditor text, char[] chars, String slashes) {
-        for (int i = 0; i < chars.length; i++) {
-            String ch = String.valueOf(chars[i]);
+        for (char ch : chars) {
             String regex = slashes + ch;
-            text.replaceAllLiteral(regex, CHAR_PROTECTOR.encode(ch));
+            text.replaceAllLiteral(regex, CHAR_PROTECTOR.encode(String.valueOf(ch)));
         }
         return text;
     }
@@ -157,8 +156,7 @@ public class MarkdownProcessor {
 
     private void doHorizontalRules(TextEditor text) {
         String[] hrDelimiters = {"\\*", "-", "_"};
-        for (int i = 0; i < hrDelimiters.length; i++) {
-            String hrDelimiter = hrDelimiters[i];
+        for (String hrDelimiter : hrDelimiters) {
             text.replaceAll("^[ ]{0,2}([ ]?" + hrDelimiter + "[ ]?){3,}[ ]*$", "<hr />");
         }
     }
@@ -296,8 +294,7 @@ public class MarkdownProcessor {
     }
 
     private void unEscapeSpecialChars(TextEditor ed) {
-        for (Iterator iterator = CHAR_PROTECTOR.getAllEncodedTokens().iterator(); iterator.hasNext();) {
-            String hash = (String) iterator.next();
+        for (String hash : CHAR_PROTECTOR.getAllEncodedTokens()) {
             String plaintext = CHAR_PROTECTOR.decode(hash);
             ed.replaceAllLiteral(hash, plaintext);
         }
@@ -306,8 +303,7 @@ public class MarkdownProcessor {
     private String encodeEmail(String s) {
         StringBuffer sb = new StringBuffer();
         char[] email = s.toCharArray();
-        for (int i = 0; i < email.length; i++) {
-            char ch = email[i];
+        for (char ch : email) {
             double r = rnd.nextDouble();
             if (r < 0.45) {      // Decimal
                 sb.append("&#");
@@ -608,11 +604,10 @@ public class MarkdownProcessor {
      * @return
      */
     private TextEditor escapeSpecialCharsWithinTagAttributes(TextEditor text) {
-        Collection tokens = text.tokenizeHTML();
+        Collection<HTMLToken> tokens = text.tokenizeHTML();
         TextEditor newText = new TextEditor("");
 
-        for (Iterator iterator = tokens.iterator(); iterator.hasNext();) {
-            HTMLToken token = (HTMLToken) iterator.next();
+        for (HTMLToken token : tokens) {
             String value = "";
             value = token.getText();
             if (token.isTag()) {

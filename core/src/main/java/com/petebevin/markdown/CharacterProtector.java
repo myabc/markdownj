@@ -58,7 +58,7 @@ class CharacterProtector {
         return unprotectMap.get(coded);
     }
 
-    public Collection getAllEncodedTokens() {
+    public Collection<String> getAllEncodedTokens() {
         return unprotectMap.keySet();
     }
 

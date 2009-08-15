@@ -222,7 +222,7 @@ public class TextEditor {
      * Parse HTML tags, returning a Collection of HTMLToken objects.
      * @return
      */
-    public Collection tokenizeHTML() {
+    public Collection<HTMLToken> tokenizeHTML() {
         List<HTMLToken> tokens = new ArrayList<HTMLToken>();
         String nestedTags = nestedTagsRegex(6);
 
