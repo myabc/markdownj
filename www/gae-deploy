@@ -1,0 +1,3 @@
+#!/bin/sh
+mvn war:war
+~/Dev/appengine-java-sdk-1.2.1/bin/appcfg.sh update target/www
