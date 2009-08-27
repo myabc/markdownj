@@ -194,15 +194,15 @@
 <div id="sidebar">
 <h1>MarkdownJ: Dingus</h1>
 
-<%--
 <ul id="ProjectSubmenu">
-    <li><a href="/projects/markdown/" title="Markdown Project Page">Main</a></li>
+    <li><a href="http://markdownj.org/" title="MarkdownJ Project Page">Main</a></li>
+    <%--
     <li><a href="/projects/markdown/basics" title="Markdown Basics">Basics</a></li>
     <li><a href="/projects/markdown/syntax" title="Markdown Syntax Documentation">Syntax</a></li>
-    <li><a href="/projects/markdown/license" title="Pricing and License Information">License</a></li>
-    <li><a  class="selected" title="Online Markdown Web Form">Dingus</a></li>
+    --%>
+    <li><a href="http://markdownj.org/license.html" title="License Information">License</a></li>
+    <li><a class="selected" title="Online MarkdownJ Web Form">Dingus</a></li>
 </ul>
---%>
 
 <p>(shamelessly stolen from <a href="http://daringfireball.net/projects/markdown/dingus">Markdown</a>).
     Download source and binaries from <a href="http://code.google.com/p/markdownj/downloads/list">Google Code</a></p>
