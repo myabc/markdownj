@@ -1,12 +1,34 @@
-<%@ page language="java" import="com.petebevin.markdown.MarkdownProcessor" %>
+<%@ page language="java" import="com.petebevin.markdown.MarkdownProcessor" pageEncoding="utf-8" %>
 <%
     MarkdownProcessor mp = new MarkdownProcessor();
-    String markup = request.getParameter("markup");
+    String markup = request.getParameter("markdown");
+    String view = request.getParameter("view");
+
+    // determine the view to show
+    boolean showSource  = true;
+    boolean showPreview = true;
+
+    if (view != null) {
+      if ("source".equals(view)) {
+        showSource  = true;
+        showPreview = false;
+      } else if ("preview".equals(view)) {
+        showSource  = false;
+        showPreview = true;
+      }; // otherwise, default to showing both
+    }
 %>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title>MarkdownJ - Markdown in Java</title>
 <style type="text/css">
+        /*
+          Basic layout courtesy of InkNoise's very nifty Layout-o-matic:
+          http://www.inknoise.com/experimental/layoutomatic.php
+        */
         #sidebar h1 {
                 font-size: 1.5em;
                 font-weight: bold;
@@ -45,7 +67,14 @@
                 font-size: 11px;
                 line-height: 1.6em;
         }
-
+        .renderbox {
+                background: white;
+                font-family: Georgia, serif;
+                font-size: 13px;
+                border: 1px #888 solid;
+                padding: 0 5px;
+                width: 97%;
+        }
         .label {
                 margin-bottom: 4px;
         }
@@ -152,14 +181,6 @@
                 background: #bbb;
         }
 
-        .renderbox {
-                background: #EEE;
-                font-family: Georgia, serif;
-                font-size: 13px;
-                border: 1px #888 solid;
-                padding: 0 5px;
-                width: 97%;
-        }
 </style>
 </head>
 
@@ -171,7 +192,18 @@
 <!-- </div> -->
 
 <div id="sidebar">
-<h1>MarkdownJ Dingus</h1>
+<h1>MarkdownJ: Dingus</h1>
+
+<%--
+<ul id="ProjectSubmenu">
+    <li><a href="/projects/markdown/" title="Markdown Project Page">Main</a></li>
+    <li><a href="/projects/markdown/basics" title="Markdown Basics">Basics</a></li>
+    <li><a href="/projects/markdown/syntax" title="Markdown Syntax Documentation">Syntax</a></li>
+    <li><a href="/projects/markdown/license" title="Pricing and License Information">License</a></li>
+    <li><a  class="selected" title="Online Markdown Web Form">Dingus</a></li>
+</ul>
+--%>
+
 <p>(shamelessly stolen from <a href="http://daringfireball.net/projects/markdown/dingus">Markdown</a>).
     Download source and binaries from <a href="http://code.google.com/p/markdownj/downloads/list">Google Code</a></p>
 
@@ -195,7 +227,7 @@ _italic_   __bold__
 <pre><code>An [example][id]. Then, anywhere
 else in the doc, define the link:
 
-   \[id]: http://example.com/  "Title"
+  [id]: http://example.com/  "Title"
 </code></pre>
 
 <h3>Images</h3>
@@ -209,7 +241,7 @@ else in the doc, define the link:
 
 <pre><code>![alt text][id]
 
-    \[id]: /url/to/img.jpg "Title"
+[id]: /url/to/img.jpg "Title"
 </code></pre>
 
 <h3>Headers</h3>
@@ -221,7 +253,6 @@ else in the doc, define the link:
 
 Header 2
 --------
-
 </code></pre>
 
 <p>atx-style (closing #'s are optional):</p>
@@ -253,9 +284,9 @@ Header 2
 <p>You can nest them:</p>
 
 <pre><code>*   Abacus
-    * ass
-*   Bastard
-    1.  bitch
+    * answer
+*   Bubbles
+    1.  bunk
     2.  bupkis
         * BELITTLER
     3. burper
@@ -265,7 +296,6 @@ Header 2
 <h3>Blockquotes</h3>
 
 <pre><code>&gt; Email-style angle brackets
-
 &gt; are used for blockquotes.
 
 &gt; &gt; And, they can be nested.
@@ -315,13 +345,32 @@ Violets are blue.
 </code></pre>
 </div> <!-- sidebar -->
 
-</div> <!-- container -->
-
-
+<div id="app">
 <form method="POST">
-Markdown Source:<br>
-<textarea name="markup" cols="80" rows="25" style="font-family: Monaco, ProFont, monospace; font-size: 10px;"><%= markup == null ? "" : markup %></textarea><br>
-<input type="submit" value="Convert">
+<div>
+<p class="label">Markdown Source:</p>
+<textarea rows="25" cols="80" style="font-family: Monaco, ProFont, monospace; font-size: 10px;" name="markdown"><%= markup == null ? "" : markup %></textarea>
+
+<div id="buttonrow">
+<div style="float:left">
+<%--
+Filter:&nbsp;<select name="filter" style="font-size: 11px; margin-right: 2em;">
+<option value='markdown'>Markdown</option>
+<option value='smartypants'>SmartyPants</option>
+<option value='both'>Both</option>
+</select>
+--%>
+Results:&nbsp;<select name="view" style="font-size: 11px; margin-right: 2em;">
+<option value='source'>Source</option>
+<option value='preview'>Preview</option>
+<option value='both' selected='selected'>Source &amp; Preview</option>
+</select>
+</div>
+
+<input type="submit" name="convert" value="Convert" class="actionbutton" />
+</div> <!--buttonrow-->
+
+</div>
 </form>
 
 <% if (markup != null) {
@@ -330,12 +379,28 @@ Markdown Source:<br>
     //log.write(markup);
     //log.close();
 %>
-HTML Source:<br>
-<textarea name="html" cols="80" rows="25" style="font-family: Monaco, ProFont, monospace; font-size: 10px;" readonly="readonly"><%= html %></textarea>
-<hr/>
-HTML Preview:
-<div class="renderbox"><%= html %></div>
+  <% if(showSource) { %>
+  <p class="label">HTML Source:</p>
+  <div>
+  <textarea name="xhtml" rows="25" cols="80" readonly="readonly" style="font-family: Monaco, ProFont, monospace; font-size: 10px;"><%= html %></textarea>
+  </div>
+  <% } %>
+  <% if(showPreview) { %>
+  <p class="label">HTML Preview:</p>
+  <div class="renderbox"><%= html %></div>
+  <% } %>
 <% } %>
+
+<%
+java.util.Calendar now = java.util.Calendar.getInstance();
+int year = now.get(java.util.Calendar.YEAR);
+%>
+<p class='footer'>MarkdownJ 0.3.0 (compatible with Markdown 1.0.2b2)<br />
+  Markdown and the Markdown Dingus are copyright &copy; 2004–<%= year %> John Gruber.
+  Used with permission.</p>
+
+</div> <!-- app -->
+</div> <!-- container -->
 
 </body>
 </html>
