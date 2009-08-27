@@ -106,6 +106,10 @@ software, even if advised of the possibility of such damage.
             <id>googlecode</id>
             <url>svn:https://markdownj.googlecode.com/svn/repo</url>
         </repository>
+        <site>
+            <id>markdownj.org</id>
+            <url>file:///../gh-pages/project</url>
+        </site>
     </distributionManagement>
 
     <licenses>
@@ -191,6 +195,12 @@ software, even if advised of the possibility of such damage.
         </extensions>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.5</version>
+                <configuration/>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
