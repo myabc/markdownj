@@ -64,6 +64,15 @@
                 <encoding>${project.build.sourceEncoding}</encoding>
             </configuration>
         </plugin>
+        <plugin>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>maven-jetty-plugin</artifactId>
+            <version>6.1.14</version>
+            <configuration>
+                <contextPath>/</contextPath>
+                <scanIntervalSeconds>3</scanIntervalSeconds>
+            </configuration>
+        </plugin>
     </plugins>
     <finalName>www</finalName>
   </build>
