@@ -64,6 +64,16 @@ software, even if advised of the possibility of such damage.
         </dependency>
     </dependencies>
 
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration/>
+            </plugin>
+        </plugins>
+    </reporting>
+
     <properties>
         <site.directory>${basedir}/../</site.directory>
     </properties>
