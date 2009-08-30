@@ -78,6 +78,7 @@
   </build>
 
     <properties>
+        <site.directory>${basedir}/../</site.directory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.deploy.server>gfv3</netbeans.hint.deploy.server>
     </properties>

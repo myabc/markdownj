@@ -67,4 +67,8 @@ software, even if advised of the possibility of such damage.
         </plugins>
     </build>
 
+    <properties>
+        <site.directory>${basedir}/../</site.directory>
+    </properties>
+
 </project>

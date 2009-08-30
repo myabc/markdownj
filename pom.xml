@@ -108,7 +108,7 @@ software, even if advised of the possibility of such damage.
         </repository>
         <site>
             <id>markdownj.org</id>
-            <url>file:///../gh-pages/project</url>
+            <url>file:///${site.directory}/gh-pages/project</url>
         </site>
     </distributionManagement>
 
@@ -265,6 +265,7 @@ software, even if advised of the possibility of such damage.
     </modules>
 
     <properties>
+        <site.directory>${basedir}</site.directory>
         <junit.version>4.5</junit.version>
         <ant.version>1.7.1</ant.version>
     </properties>
