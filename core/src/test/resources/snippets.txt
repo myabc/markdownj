@@ -240,3 +240,60 @@ content by blank lines, and the start and end tags of the block should
 not be indented with tabs or spaces. Markdown is smart enough not
 to add extra (unwanted) <code>&lt;p&gt;</code> tags around HTML block-level tags.</p>
 
+
+# Test 14 (block code with backrefs and language detection)
+This is a normal paragraph.
+
+    lang:java
+    package com.petebevin.markdown;
+
+    import java.util.regex.Matcher;
+
+    public interface Replacement {
+        String replacement(Matcher m);
+    }
+
+# Result 14
+<p>This is a normal paragraph.</p>
+
+<pre class="java">
+package com.petebevin.markdown;
+
+import java.util.regex.Matcher;
+
+public interface Replacement {
+    String replacement(Matcher m);
+}
+</pre>
+
+
+# Test 15 (block code with language detection; edge case: spaces)
+This is a normal paragraph.
+
+    lang:   java
+    This is a $4 preformatted
+    code block.
+
+# Result 15
+<p>This is a normal paragraph.</p>
+
+<pre class="java">
+This is a $4 preformatted
+code block.
+</pre>
+
+
+# Test 16 (block code with language detection; edge case: empty lang)
+This is a normal paragraph.
+
+    lang:
+    This is a $4 preformatted
+    code block.
+
+# Result 16
+<p>This is a normal paragraph.</p>
+
+<pre><code>lang:
+This is a $4 preformatted
+code block.
+</code></pre>

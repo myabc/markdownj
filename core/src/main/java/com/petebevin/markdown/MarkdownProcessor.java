@@ -36,7 +36,10 @@ software, even if advised of the possibility of such damage.
 
 package com.petebevin.markdown;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Random;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -360,13 +363,55 @@ public class MarkdownProcessor {
                 ")" +
                 "((?=^[ ]{0,4}\\S)|\\Z)", Pattern.MULTILINE);
         return markup.replaceAll(p, new Replacement() {
+        			private static final String LANG_IDENTIFIER = "lang:";
                     public String replacement(Matcher m) {
                         String codeBlock = m.group(1);
                         TextEditor ed = new TextEditor(codeBlock);
                         ed.outdent();
                         encodeCode(ed);
                         ed.detabify().deleteAll("\\A\\n+").deleteAll("\\s+\\z");
-                        return "\n\n<pre><code>" + ed.toString() + "\n</code></pre>\n\n";
+                        String text = ed.toString();
+                        String out = "";
+                        String firstLine = firstLine(text);
+                        if (isLanguageIdentifier(firstLine)) {
+                          out = languageBlock(firstLine, text);
+                        } else {
+                          out = genericCodeBlock(text);
+                        }
+                        return out;
+                    }
+
+                    public String firstLine(String text)
+                    {
+                        if (text == null) return "";
+                        String[] splitted = text.split("\\n");
+                        return splitted[0];
+                    }
+                    
+                    public boolean isLanguageIdentifier(String line)
+                    {
+                        if (line == null) return false;
+                        String lang = "";
+                        if (line.startsWith(LANG_IDENTIFIER)) {
+                        	lang = line.replaceFirst(LANG_IDENTIFIER, "").trim();
+                        }
+                        return lang.length() > 0;
+                    }
+                    
+                    public String languageBlock(String firstLine, String text)
+                    {
+                        // dont'use %n in format string (markdown aspect every new line char as "\n")
+                    	//String codeBlockTemplate = "<pre class=\"brush: %s\">%n%s%n</pre>"; // http://alexgorbatchev.com/wiki/SyntaxHighlighter
+                        String codeBlockTemplate = "\n\n<pre class=\"%s\">\n%s\n</pre>\n\n"; // http://shjs.sourceforge.net/doc/documentation.html
+                        String lang = firstLine.replaceFirst(LANG_IDENTIFIER, "").trim();
+                        String block = text.replaceFirst( firstLine+"\n", "");
+                        return String.format(codeBlockTemplate, lang, block);
+                    }
+                    public String genericCodeBlock(String text)
+                    {
+                        // dont'use %n in format string (markdown aspect every new line char as "\n")
+                    	String codeBlockTemplate = "\n\n<pre><code>%s\n</code></pre>\n\n";
+                        return String.format(codeBlockTemplate, text);
                     }
                 });
     }
