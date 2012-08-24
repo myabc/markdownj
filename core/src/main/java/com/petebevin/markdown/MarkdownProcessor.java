@@ -668,9 +668,47 @@ public class MarkdownProcessor {
     }
 
     private void doImages(TextEditor text) {
-        text.replaceAll("!\\[(.*)\\]\\((.*) \"(.*)\"\\)", "<img src=\"$2\" alt=\"$1\" title=\"$3\" />");
-        text.replaceAll("!\\[(.*)\\]\\((.*)\\)", "<img src=\"$2\" alt=\"$1\" />");
-    }
+        // Inline image syntax
+    	text.replaceAll("!\\[(.*)\\]\\((.*) \"(.*)\"\\)", "<img src=\"$2\" alt=\"$1\" title=\"$3\" />");
+    	text.replaceAll("!\\[(.*)\\]\\((.*)\\)", "<img src=\"$2\" alt=\"$1\" />");
+        
+        // Reference-style image syntax
+    	Pattern imageLink = Pattern.compile("(" +
+            	"[!]\\[(.*?)\\]" + // alt text = $2
+            	"[ ]?(?:\\n[ ]*)?" +
+            	"\\[(.*?)\\]" + // ID = $3
+            	")");
+    	text.replaceAll(imageLink, new Replacement() {
+        	public String replacement(Matcher m) {
+            	String replacementText;
+            	String wholeMatch = m.group(1);
+            	String altText = m.group(2);
+            	String id = m.group(3).toLowerCase();
+            	if (id == null || "".equals(id)) {
+                	id = altText.toLowerCase();
+            	}
+           	 
+            	// imageDefinition is the same as linkDefinition
+            	LinkDefinition defn = linkDefinitions.get(id);
+            	if (defn != null) {
+                	String url = defn.getUrl();
+                	url = url.replaceAll("\\*", CHAR_PROTECTOR.encode("*"));
+                	url = url.replaceAll("_", CHAR_PROTECTOR.encode("_"));
+                	String title = defn.getTitle();
+                	String titleTag = "";
+                	if (title != null && !title.equals("")) {
+                    	title = title.replaceAll("\\*", CHAR_PROTECTOR.encode("*"));
+                    	title = title.replaceAll("_", CHAR_PROTECTOR.encode("_"));
+                    	titleTag = " alt=\"" + altText + "\" title=\"" + title + "\"";
+                	}
+                	replacementText = "<img src=\"" + url + "\"" + titleTag + "/>";
+            	} else {
+                	replacementText = wholeMatch;
+            	}
+            	return replacementText;
+        	}
+    	});
+	}
 
     private TextEditor doAnchors(TextEditor markup) {
         // Internal references: [link text] [id]
