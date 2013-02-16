@@ -33,9 +33,7 @@ software, even if advised of the possibility of such damage.
 
 */
 
-package com.petebevin.markdown.test;
-
-import com.petebevin.markdown.MarkdownProcessor;
+package org.markdownj.test;
 
 import java.io.File;
 import java.io.FileReader;
@@ -45,11 +43,12 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import static org.junit.Assert.*;
+import org.markdownj.MarkdownProcessor;
 
 @RunWith(value = Parameterized.class)
 public class MarkdownTestTester {

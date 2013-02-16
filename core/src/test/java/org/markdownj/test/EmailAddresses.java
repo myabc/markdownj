@@ -33,10 +33,36 @@ software, even if advised of the possibility of such damage.
 
 */
 
-package com.petebevin.markdown;
+package org.markdownj.test;
 
-import java.util.regex.Matcher;
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.markdownj.HTMLDecoder;
+import org.markdownj.MarkdownProcessor;
 
-public interface Replacement {
-    String replacement(Matcher m);
+public class EmailAddresses {
+    MarkdownProcessor m;
+
+    @Before
+    public void createProcessor() {
+        m = new MarkdownProcessor();
+    }
+
+    @Test
+    public void testDecoder() {
+        String encoded = "&#98;&#105;&#x6C;&#x6C;&#x67;&#64;&#x6D;i&#x63;&#x72;&#x6F;&#115;&#x6F;&#x66;&#116;&#x2E;c&#111;&#109;";
+        String billg = "billg@microsoft.com";
+
+        assertEquals(billg, HTMLDecoder.decode(encoded));
+        assertEquals("", HTMLDecoder.decode(""));
+    }
+
+    @Test
+    public void testEmail() {
+        String html = m.markdown("<billg@microsoft.com>");
+        String plain = HTMLDecoder.decode(html);
+        assertEquals("<p><a href=\"mailto:billg@microsoft.com\">billg@microsoft.com</a></p>\n", plain);
+        assertFalse("Email addresses are masked", plain.equals(html));
+    }
 }

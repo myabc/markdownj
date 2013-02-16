@@ -33,46 +33,27 @@ software, even if advised of the possibility of such damage.
 
 */
 
-package com.petebevin.markdown.test;
+package org.markdownj;
 
-import com.petebevin.markdown.MarkdownProcessor;
+public class LinkDefinition {
+    private String url;
+    private String title;
 
-import java.util.regex.Pattern;
-
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
-
-public class EdgeCases {
-    private MarkdownProcessor m;
-
-    @Before
-    public void createProcessor() {
-        m = new MarkdownProcessor();
+    public LinkDefinition(String url, String title) {
+        this.url = url;
+        this.title = title;
     }
 
-    @Test
-    public void testEmptyString() {
-        assertEquals("\n", m.markdown(""));
+    public String getUrl() {
+        return url;
     }
 
-    @Test
-    public void testSpaces() {
-        assertEquals("\n", m.markdown("  "));
+    public String getTitle() {
+        return title;
     }
 
-    @Test
-    public void testNull() {
-        assertEquals("\n", m.markdown(null));
-    }
-
-    @Test
-    public void testSplitAssumption() {
-        // In Perl, split(/x/, "") returns the empty string.
-        // But in Java, it's the array { "" }.
-        Pattern x = Pattern.compile("x");
-        String[] xs = x.split("");
-        assertEquals (1, xs.length);
-        assertEquals("", xs[0]);
+    @Override
+    public String toString() {
+        return url + " (" + title + ")";
     }
 }

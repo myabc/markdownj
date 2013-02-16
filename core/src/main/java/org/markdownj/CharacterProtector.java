@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2006, Nathan Winant, nw@exegetic.net.
+Copyright (c) 2005, Pete Bevin.
 <http://markdownj.petebevin.com>
 
 All rights reserved.
@@ -33,36 +33,52 @@ software, even if advised of the possibility of such damage.
 
 */
 
-package com.petebevin.markdown.test;
+package org.markdownj;
 
-import com.petebevin.markdown.MarkdownProcessor;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+class CharacterProtector {
+    private Map<String, String> protectMap = new HashMap<String, String>();
+    private Map<String, String> unprotectMap = new HashMap<String, String>();
+    private static final String GOOD_CHARS = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+    private Random rnd = new Random();
 
-public class EscapeSpecialCharsWithinTagAttributes {
-    MarkdownProcessor m;
 
-    @Before
-    public void createProcessor() {
-        m = new MarkdownProcessor();
+    public String encode(String literal) {
+        if (!protectMap.containsKey(literal)) {
+            addToken(literal);
+        }
+        return protectMap.get(literal);
     }
 
-    @Test
-    public void testImages() {
-        String url = "![an *image*](/images/an_image_with_underscores.jpg \"An_image_title\")";
-        String processed = m.markdown(url);
-        String output = "<p><img src=\"/images/an_image_with_underscores.jpg\" alt=\"an *image*\" title=\"An_image_title\" /></p>\n";
-        assertEquals(output, processed);
+    public String decode(String coded) {
+        return unprotectMap.get(coded);
     }
 
-    @Test
-    public void testAutoLinks() {
-        String url = "[a _link_](http://url.com/a_tale_of_two_cities?var1=a_query_&var2=string \"A_link_title\")";
-        String processed = m.markdown(url);
-        String output = "<p><a href=\"http://url.com/a_tale_of_two_cities?var1=a_query_&amp;var2=string\" title=\"A_link_title\">a <em>link</em></a></p>\n";
-        assertEquals(output, processed);
+    public Collection<String> getAllEncodedTokens() {
+        return unprotectMap.keySet();
     }
 
+    private void addToken(String literal) {
+        String encoded = longRandomString();
+        protectMap.put(literal, encoded);
+        unprotectMap.put(encoded, literal);
+    }
+
+    private String longRandomString() {
+        StringBuffer sb = new StringBuffer();
+        final int CHAR_MAX = GOOD_CHARS.length();
+        for (int i = 0; i < 20; i++) {
+            sb.append(GOOD_CHARS.charAt(rnd.nextInt(CHAR_MAX)));
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public String toString() {
+        return protectMap.toString();
+    }
 }

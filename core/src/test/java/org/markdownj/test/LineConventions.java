@@ -33,52 +33,36 @@ software, even if advised of the possibility of such damage.
 
 */
 
-package com.petebevin.markdown;
+package org.markdownj.test;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.markdownj.MarkdownProcessor;
 
-class CharacterProtector {
-    private Map<String, String> protectMap = new HashMap<String, String>();
-    private Map<String, String> unprotectMap = new HashMap<String, String>();
-    private static final String GOOD_CHARS = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
-    private Random rnd = new Random();
+public class LineConventions {
+    private static final String EXPECTED = "<p>a\nb\nc</p>\n";
+    private MarkdownProcessor m;
 
-
-    public String encode(String literal) {
-        if (!protectMap.containsKey(literal)) {
-            addToken(literal);
-        }
-        return protectMap.get(literal);
+    @Before
+    public void createProcessor() {
+        m = new MarkdownProcessor();
     }
 
-    public String decode(String coded) {
-        return unprotectMap.get(coded);
+    @Test
+    public void testUnixLineConventions() {
+        assertEquals(EXPECTED, m.markdown("a\nb\nc\n"));
     }
 
-    public Collection<String> getAllEncodedTokens() {
-        return unprotectMap.keySet();
+    @Test
+    public void testWindowsLineConventions() {
+        MarkdownProcessor markup = new MarkdownProcessor();
+        assertEquals(EXPECTED, markup.markdown("a\r\nb\r\nc\r\n"));
     }
 
-    private void addToken(String literal) {
-        String encoded = longRandomString();
-        protectMap.put(literal, encoded);
-        unprotectMap.put(encoded, literal);
-    }
-
-    private String longRandomString() {
-        StringBuffer sb = new StringBuffer();
-        final int CHAR_MAX = GOOD_CHARS.length();
-        for (int i = 0; i < 20; i++) {
-            sb.append(GOOD_CHARS.charAt(rnd.nextInt(CHAR_MAX)));
-        }
-        return sb.toString();
-    }
-
-    @Override
-    public String toString() {
-        return protectMap.toString();
+    @Test
+    public void testMacLineConventions() {
+        MarkdownProcessor markup = new MarkdownProcessor();
+        assertEquals(EXPECTED, markup.markdown("a\rb\rc\r"));
     }
 }

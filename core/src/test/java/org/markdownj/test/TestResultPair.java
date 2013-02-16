@@ -33,37 +33,29 @@ software, even if advised of the possibility of such damage.
 
 */
 
-package com.petebevin.markdown.test;
+package org.markdownj.test;
 
-import com.petebevin.markdown.MarkdownProcessor;
+public class TestResultPair {
+    private String name;
+    private String test;
+    private String result;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
-
-public class LineConventions {
-    private static final String EXPECTED = "<p>a\nb\nc</p>\n";
-    private MarkdownProcessor m;
-
-    @Before
-    public void createProcessor() {
-        m = new MarkdownProcessor();
+    public TestResultPair(String name, String test, String result) {
+        this.name = name;
+        this.test = test;
+        this.result = result;
     }
 
-    @Test
-    public void testUnixLineConventions() {
-        assertEquals(EXPECTED, m.markdown("a\nb\nc\n"));
+    public String getTest() {
+        return test;
     }
 
-    @Test
-    public void testWindowsLineConventions() {
-        MarkdownProcessor markup = new MarkdownProcessor();
-        assertEquals(EXPECTED, markup.markdown("a\r\nb\r\nc\r\n"));
+    public String getResult() {
+        return result;
     }
 
-    @Test
-    public void testMacLineConventions() {
-        MarkdownProcessor markup = new MarkdownProcessor();
-        assertEquals(EXPECTED, markup.markdown("a\rb\rc\r"));
+    @Override
+    public String toString() {
+        return name;
     }
 }

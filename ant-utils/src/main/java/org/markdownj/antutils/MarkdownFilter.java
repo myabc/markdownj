@@ -33,12 +33,12 @@ negligence or otherwise) arising in any way out of the use of this
 software, even if advised of the possibility of such damage.
 
 */
-package com.petebevin.markdown;
+package org.markdownj.antutils;
 
 import java.io.Reader;
-
 import org.apache.tools.ant.filters.BaseParamFilterReader;
 import org.apache.tools.ant.filters.ChainableReader;
+import org.markdown.MarkdownProcessor;
 
 /**
  * Provides a Markdown-based FilterReader suitable for use by Ant.
@@ -46,7 +46,7 @@ import org.apache.tools.ant.filters.ChainableReader;
  * <code><pre>
  * &lt;copy file="${src.file}" tofile="${dest.file}"&gt;
  *   &lt;filterchain&gt;
- *     &lt;filterreader classname="com.petebevin.markdown.MarkdownFilter"/&gt;
+ *     &lt;filterreader classname="org.markdownj.MarkdownFilter"/&gt;
  *   &lt;/filterchain&gt;
  * &lt;/copy&gt;
  * </pre></code>

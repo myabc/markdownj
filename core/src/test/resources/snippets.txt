@@ -245,7 +245,7 @@ to add extra (unwanted) <code>&lt;p&gt;</code> tags around HTML block-level tags
 This is a normal paragraph.
 
     lang:java
-    package com.petebevin.markdown;
+    package org.markdownj;
 
     import java.util.regex.Matcher;
 
@@ -257,7 +257,7 @@ This is a normal paragraph.
 <p>This is a normal paragraph.</p>
 
 <pre class="java">
-package com.petebevin.markdown;
+package org.markdownj;
 
 import java.util.regex.Matcher;
 

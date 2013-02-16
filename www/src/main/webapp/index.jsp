@@ -1,4 +1,4 @@
-<%@ page language="java" import="com.petebevin.markdown.MarkdownProcessor" pageEncoding="utf-8" %>
+<%@ page language="java" import="org.markdownj.MarkdownProcessor" pageEncoding="utf-8" %>
 <%
     MarkdownProcessor mp = new MarkdownProcessor();
     String markup = request.getParameter("markdown");

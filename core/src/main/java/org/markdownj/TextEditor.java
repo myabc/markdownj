@@ -33,7 +33,7 @@ software, even if advised of the possibility of such damage.
 
 */
 
-package com.petebevin.markdown;
+package org.markdownj;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

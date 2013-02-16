@@ -33,27 +33,32 @@ software, even if advised of the possibility of such damage.
 
 */
 
-package com.petebevin.markdown;
+package org.markdownj;
 
-public class LinkDefinition {
-    private String url;
-    private String title;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-    public LinkDefinition(String url, String title) {
-        this.url = url;
-        this.title = title;
-    }
+public class HTMLDecoder {
+    public static String decode(String html) {
+        TextEditor ed = new TextEditor(html);
+        Pattern p1 = Pattern.compile("&#(\\d+);");
+        ed.replaceAll(p1, new Replacement() {
+            public String replacement(Matcher m) {
+                String charDecimal = m.group(1);
+                char ch = (char) Integer.parseInt(charDecimal);
+                return Character.toString(ch);
+            }
+        });
 
-    public String getUrl() {
-        return url;
-    }
+        Pattern p2 = Pattern.compile("&#x([0-9a-fA-F]+);");
+        ed.replaceAll(p2, new Replacement() {
+            public String replacement(Matcher m) {
+                String charHex = m.group(1);
+                char ch = (char) Integer.parseInt(charHex, 16);
+                return Character.toString(ch);
+            }
+        });
 
-    public String getTitle() {
-        return title;
-    }
-
-    @Override
-    public String toString() {
-        return url + " (" + title + ")";
+        return ed.toString();
     }
 }
