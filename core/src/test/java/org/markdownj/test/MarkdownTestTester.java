@@ -35,6 +35,7 @@ software, even if advised of the possibility of such damage.
 
 package org.markdownj.test;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -94,12 +95,13 @@ public class MarkdownTestTester {
     private String slurp(String fileName) throws IOException {
         URL fileUrl = this.getClass().getResource(fileName);
         File file = new File(URLDecoder.decode(fileUrl.getFile(), "UTF-8"));
-        FileReader in = new FileReader(file);
-        StringBuffer sb = new StringBuffer();
-        int ch;
-        while ((ch = in.read()) != -1) {
-            sb.append((char) ch);
+        BufferedReader in = new BufferedReader(new FileReader(file));
+        StringBuilder sb  = new StringBuilder();
+        String line;
+        while ((line = in.readLine()) != null) {
+            sb.append(line).append("\n");
         }
+        in.close();
         return sb.toString();
     }
 }
