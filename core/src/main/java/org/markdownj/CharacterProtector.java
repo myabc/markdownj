@@ -36,13 +36,14 @@ software, even if advised of the possibility of such damage.
 package org.markdownj;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-class CharacterProtector {
-    private Map<String, String> protectMap = new HashMap<String, String>();
-    private Map<String, String> unprotectMap = new HashMap<String, String>();
+public class CharacterProtector {
+    private final Map<String, String> protectMap = new HashMap<String, String>();
+    private final Map<String, String> unprotectMap = new HashMap<String, String>();
     private static final String GOOD_CHARS = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
     private Random rnd = new Random();
 
@@ -59,17 +60,20 @@ class CharacterProtector {
     }
 
     public Collection<String> getAllEncodedTokens() {
-        return unprotectMap.keySet();
+        return Collections.unmodifiableSet(unprotectMap.keySet());
     }
 
     private void addToken(String literal) {
         String encoded = longRandomString();
-        protectMap.put(literal, encoded);
-        unprotectMap.put(encoded, literal);
+
+        synchronized (this) {
+          protectMap.put(literal, encoded);
+          unprotectMap.put(encoded, literal);
+        }
     }
 
     private String longRandomString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         final int CHAR_MAX = GOOD_CHARS.length();
         for (int i = 0; i < 20; i++) {
             sb.append(GOOD_CHARS.charAt(rnd.nextInt(CHAR_MAX)));
