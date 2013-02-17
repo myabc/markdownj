@@ -246,7 +246,7 @@ software, even if advised of the possibility of such damage.
 
     <properties>
         <site.directory>${basedir}</site.directory>
-        <junit.version>4.5</junit.version>
+        <junit.version>4.11</junit.version>
         <ant.version>1.7.1</ant.version>
     </properties>
 
