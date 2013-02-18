@@ -37,22 +37,28 @@ package org.markdownj;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class CharacterProtector {
-    private final Map<String, String> protectMap = new HashMap<String, String>();
-    private final Map<String, String> unprotectMap = new HashMap<String, String>();
+    private final ConcurrentMap<String, String> protectMap = new ConcurrentHashMap<String, String>();
+    private final ConcurrentMap<String, String> unprotectMap = new ConcurrentHashMap<String, String>();
     private static final String GOOD_CHARS = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
     private Random rnd = new Random();
 
 
     public String encode(String literal) {
-        if (!protectMap.containsKey(literal)) {
-            addToken(literal);
+        String encoded = protectMap.get(literal);
+        if (encoded == null) {
+            synchronized (protectMap) {
+                encoded = protectMap.get(literal);
+                if (encoded == null) {
+                    encoded = addToken(literal);
+                }
+            }
         }
-        return protectMap.get(literal);
+        return encoded;
     }
 
     public String decode(String coded) {
@@ -63,13 +69,13 @@ public class CharacterProtector {
         return Collections.unmodifiableSet(unprotectMap.keySet());
     }
 
-    private void addToken(String literal) {
+    private String addToken(String literal) {
         String encoded = longRandomString();
 
-        synchronized (this) {
-          protectMap.put(literal, encoded);
-          unprotectMap.put(encoded, literal);
-        }
+        protectMap.put(literal, encoded);
+        unprotectMap.put(encoded, literal);
+
+        return encoded;
     }
 
     private String longRandomString() {
