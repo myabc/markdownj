@@ -69,7 +69,7 @@ public class MarkdownProcessor extends org.markdownj.MarkdownProcessor {
      */
     @Deprecated
     public static void main(java.lang.String[] args) {
-        MarkdownProcessor.main(args);
+        org.markdownj.MarkdownProcessor.main(args);
     }
 
 }
