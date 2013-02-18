@@ -371,7 +371,7 @@ public class MarkdownProcessor {
                         encodeCode(ed);
                         ed.detabify().deleteAll("\\A\\n+").deleteAll("\\s+\\z");
                         String text = ed.toString();
-                        String out = "";
+                        String out;
                         String firstLine = firstLine(text);
                         if (isLanguageIdentifier(firstLine)) {
                           out = languageBlock(firstLine, text);
@@ -383,14 +383,18 @@ public class MarkdownProcessor {
 
                     public String firstLine(String text)
                     {
-                        if (text == null) return "";
+                        if (text == null) {
+                            return "";
+                        }
                         String[] splitted = text.split("\\n");
                         return splitted[0];
                     }
 
                     public boolean isLanguageIdentifier(String line)
                     {
-                        if (line == null) return false;
+                        if (line == null) {
+                            return false;
+                        }
                         String lang = "";
                         if (line.startsWith(LANG_IDENTIFIER)) {
                         	lang = line.replaceFirst(LANG_IDENTIFIER, "").trim();
@@ -457,12 +461,12 @@ public class MarkdownProcessor {
                 public String replacement(Matcher m) {
                     String list = m.group(1);
                     String listStart = m.group(3);
-                    String listType = "";
+                    String listType;
 
                     if (listStart.matches("[*+-]")) {
-                     listType = "ul";
+                        listType = "ul";
                     } else {
-                     listType = "ol";
+                        listType = "ol";
                     }
 
                     // Turn double returns into triple returns, so that we can make a
@@ -653,8 +657,7 @@ public class MarkdownProcessor {
         TextEditor newText = new TextEditor("");
 
         for (HTMLToken token : tokens) {
-            String value = "";
-            value = token.getText();
+            String value = token.getText();
             if (token.isTag()) {
                 value = value.replaceAll("\\\\", CHAR_PROTECTOR.encode("\\"));
                 value = value.replaceAll("`", CHAR_PROTECTOR.encode("`"));
