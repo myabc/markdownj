@@ -35,18 +35,18 @@ software, even if advised of the possibility of such damage.
 
 package org.markdownj;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
  * Mutable String with common operations used in Markdown processing.
  */
 public class TextEditor {
-    private StringBuffer text;
+    private StringBuilder text;
 
     /**
      * Create a new TextEditor based on the contents of a String or
@@ -55,7 +55,7 @@ public class TextEditor {
      * @param text
      */
     public TextEditor(CharSequence text) {
-        this.text = new StringBuffer(text.toString());
+        this.text = new StringBuilder(text);
     }
 
     /**
@@ -85,7 +85,7 @@ public class TextEditor {
                 m.appendReplacement(sb, r);
             }
             m.appendTail(sb);
-            text = sb;
+            text = new StringBuilder(sb.toString());
         }
         return this;
     }
@@ -117,7 +117,7 @@ public class TextEditor {
     public TextEditor replaceAll(Pattern pattern, Replacement replacement) {
         Matcher m = pattern.matcher(text);
         int lastIndex = 0;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         while (m.find()) {
             sb.append(text.subSequence(lastIndex, m.start()));
             sb.append(replacement.replacement(m));
@@ -159,7 +159,7 @@ public class TextEditor {
             public String replacement(Matcher m) {
                 String lineSoFar = m.group(1);
                 int width = lineSoFar.length();
-                StringBuffer replacement = new StringBuffer(lineSoFar);
+                StringBuilder replacement = new StringBuilder(lineSoFar);
                 do {
                     replacement.append(' ');
                     ++width;
@@ -193,7 +193,7 @@ public class TextEditor {
      * @return
      */
     public TextEditor trim() {
-        text = new StringBuffer(text.toString().trim());
+        text = new StringBuilder(text.toString().trim());
         return this;
     }
 
@@ -203,7 +203,7 @@ public class TextEditor {
      * @return
      */
     public TextEditor indent(int spaces) {
-        StringBuffer sb = new StringBuffer(spaces);
+        StringBuilder sb = new StringBuilder(spaces);
         for (int i = 0; i < spaces; i++) {
             sb.append(' ');
         }
@@ -268,10 +268,7 @@ public class TextEditor {
      * @param s
      */
     public void prepend(CharSequence s) {
-        StringBuffer newText = new StringBuffer();
-        newText.append(s);
-        newText.append(text);
-        text = newText;
+        text.insert(0, s);
     }
 
     /**
