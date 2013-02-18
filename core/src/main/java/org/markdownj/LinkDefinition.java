@@ -33,37 +33,27 @@ software, even if advised of the possibility of such damage.
 
 */
 
-package com.petebevin.markdown.test;
+package org.markdownj;
 
-import com.petebevin.markdown.MarkdownProcessor;
+public class LinkDefinition {
+    private String url;
+    private String title;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
-
-public class LineConventions {
-    private static final String EXPECTED = "<p>a\nb\nc</p>\n";
-    private MarkdownProcessor m;
-
-    @Before
-    public void createProcessor() {
-        m = new MarkdownProcessor();
+    public LinkDefinition(String url, String title) {
+        this.url = url;
+        this.title = title;
     }
 
-    @Test
-    public void testUnixLineConventions() {
-        assertEquals(EXPECTED, m.markdown("a\nb\nc\n"));
+    public String getUrl() {
+        return url;
     }
 
-    @Test
-    public void testWindowsLineConventions() {
-        MarkdownProcessor markup = new MarkdownProcessor();
-        assertEquals(EXPECTED, markup.markdown("a\r\nb\r\nc\r\n"));
+    public String getTitle() {
+        return title;
     }
 
-    @Test
-    public void testMacLineConventions() {
-        MarkdownProcessor markup = new MarkdownProcessor();
-        assertEquals(EXPECTED, markup.markdown("a\rb\rc\r"));
+    @Override
+    public String toString() {
+        return url + " (" + title + ")";
     }
 }

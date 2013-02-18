@@ -1,9 +1,8 @@
-package com.petebevin.markdown.test;
+package org.markdownj.test;
 
-import com.petebevin.markdown.TextEditor;
-
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Test;
+import org.markdownj.TextEditor;
 
 public class TestTextEditor {
 

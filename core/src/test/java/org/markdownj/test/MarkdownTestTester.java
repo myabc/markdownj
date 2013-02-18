@@ -33,10 +33,9 @@ software, even if advised of the possibility of such damage.
 
 */
 
-package com.petebevin.markdown.test;
+package org.markdownj.test;
 
-import com.petebevin.markdown.MarkdownProcessor;
-
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -45,11 +44,12 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import static org.junit.Assert.*;
+import org.markdownj.MarkdownProcessor;
 
 @RunWith(value = Parameterized.class)
 public class MarkdownTestTester {
@@ -95,12 +95,13 @@ public class MarkdownTestTester {
     private String slurp(String fileName) throws IOException {
         URL fileUrl = this.getClass().getResource(fileName);
         File file = new File(URLDecoder.decode(fileUrl.getFile(), "UTF-8"));
-        FileReader in = new FileReader(file);
-        StringBuffer sb = new StringBuffer();
-        int ch;
-        while ((ch = in.read()) != -1) {
-            sb.append((char) ch);
+        BufferedReader in = new BufferedReader(new FileReader(file));
+        StringBuilder sb  = new StringBuilder();
+        String line;
+        while ((line = in.readLine()) != null) {
+            sb.append(line).append("\n");
         }
+        in.close();
         return sb.toString();
     }
 }

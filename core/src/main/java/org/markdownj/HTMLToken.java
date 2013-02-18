@@ -1,4 +1,4 @@
-package com.petebevin.markdown;
+package org.markdownj;
 
 public class HTMLToken {
     private boolean isTag;

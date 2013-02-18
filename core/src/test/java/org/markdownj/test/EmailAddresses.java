@@ -33,18 +33,16 @@ software, even if advised of the possibility of such damage.
 
 */
 
-package com.petebevin.markdown.test;
+package org.markdownj.test;
 
-import com.petebevin.markdown.MarkdownProcessor;
-
-import java.util.regex.Pattern;
-
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import org.markdownj.HTMLDecoder;
+import org.markdownj.MarkdownProcessor;
 
-public class EdgeCases {
-    private MarkdownProcessor m;
+public class EmailAddresses {
+    MarkdownProcessor m;
 
     @Before
     public void createProcessor() {
@@ -52,27 +50,19 @@ public class EdgeCases {
     }
 
     @Test
-    public void testEmptyString() {
-        assertEquals("\n", m.markdown(""));
+    public void testDecoder() {
+        String encoded = "&#98;&#105;&#x6C;&#x6C;&#x67;&#64;&#x6D;i&#x63;&#x72;&#x6F;&#115;&#x6F;&#x66;&#116;&#x2E;c&#111;&#109;";
+        String billg = "billg@microsoft.com";
+
+        assertEquals(billg, HTMLDecoder.decode(encoded));
+        assertEquals("", HTMLDecoder.decode(""));
     }
 
     @Test
-    public void testSpaces() {
-        assertEquals("\n", m.markdown("  "));
-    }
-
-    @Test
-    public void testNull() {
-        assertEquals("\n", m.markdown(null));
-    }
-
-    @Test
-    public void testSplitAssumption() {
-        // In Perl, split(/x/, "") returns the empty string.
-        // But in Java, it's the array { "" }.
-        Pattern x = Pattern.compile("x");
-        String[] xs = x.split("");
-        assertEquals (1, xs.length);
-        assertEquals("", xs[0]);
+    public void testEmail() {
+        String html = m.markdown("<billg@microsoft.com>");
+        String plain = HTMLDecoder.decode(html);
+        assertEquals("<p><a href=\"mailto:billg@microsoft.com\">billg@microsoft.com</a></p>\n", plain);
+        assertFalse("Email addresses are masked", plain.equals(html));
     }
 }

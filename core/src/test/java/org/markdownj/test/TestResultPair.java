@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2006, Nathan Winant, nw@exegetic.net.
+Copyright (c) 2005, Pete Bevin.
 <http://markdownj.petebevin.com>
 
 All rights reserved.
@@ -33,36 +33,29 @@ software, even if advised of the possibility of such damage.
 
 */
 
-package com.petebevin.markdown.test;
+package org.markdownj.test;
 
-import com.petebevin.markdown.MarkdownProcessor;
+public class TestResultPair {
+    private String name;
+    private String test;
+    private String result;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
-
-public class EscapeSpecialCharsWithinTagAttributes {
-    MarkdownProcessor m;
-
-    @Before
-    public void createProcessor() {
-        m = new MarkdownProcessor();
+    public TestResultPair(String name, String test, String result) {
+        this.name = name;
+        this.test = test;
+        this.result = result;
     }
 
-    @Test
-    public void testImages() {
-        String url = "![an *image*](/images/an_image_with_underscores.jpg \"An_image_title\")";
-        String processed = m.markdown(url);
-        String output = "<p><img src=\"/images/an_image_with_underscores.jpg\" alt=\"an *image*\" title=\"An_image_title\" /></p>\n";
-        assertEquals(output, processed);
+    public String getTest() {
+        return test;
     }
 
-    @Test
-    public void testAutoLinks() {
-        String url = "[a _link_](http://url.com/a_tale_of_two_cities?var1=a_query_&var2=string \"A_link_title\")";
-        String processed = m.markdown(url);
-        String output = "<p><a href=\"http://url.com/a_tale_of_two_cities?var1=a_query_&amp;var2=string\" title=\"A_link_title\">a <em>link</em></a></p>\n";
-        assertEquals(output, processed);
+    public String getResult() {
+        return result;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

@@ -33,29 +33,10 @@ software, even if advised of the possibility of such damage.
 
 */
 
-package com.petebevin.markdown.test;
+package org.markdownj;
 
-public class TestResultPair {
-    private String name;
-    private String test;
-    private String result;
+import java.util.regex.Matcher;
 
-    public TestResultPair(String name, String test, String result) {
-        this.name = name;
-        this.test = test;
-        this.result = result;
-    }
-
-    public String getTest() {
-        return test;
-    }
-
-    public String getResult() {
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
+public interface Replacement {
+    String replacement(Matcher m);
 }

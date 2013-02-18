@@ -33,9 +33,7 @@ software, even if advised of the possibility of such damage.
 
 */
 
-package com.petebevin.markdown.test;
-
-import com.petebevin.markdown.MarkdownProcessor;
+package org.markdownj.test;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -46,11 +44,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import static org.junit.Assert.*;
+import org.markdownj.MarkdownProcessor;
 
 @RunWith(value = Parameterized.class)
 public class MarkupFileTester {
@@ -87,8 +86,8 @@ public class MarkupFileTester {
         URL fileUrl = MarkupFileTester.class.getResource(filename);
         FileReader file = new FileReader(fileUrl.getFile());
         BufferedReader in = new BufferedReader(file);
-        StringBuffer test = null;
-        StringBuffer result = null;
+        StringBuilder test = null;
+        StringBuilder result = null;
 
         Pattern pTest = Pattern.compile("# Test (\\w+) \\((.*)\\)");
         Pattern pResult = Pattern.compile("# Result (\\w+)");
@@ -97,7 +96,7 @@ public class MarkupFileTester {
 
         String testNumber = null;
         String testName = null;
-        StringBuffer curbuf = null;
+        StringBuilder curbuf = null;
         while ((line = in.readLine()) != null) {
             lineNumber++;
             Matcher mTest = pTest.matcher(line);
@@ -107,8 +106,8 @@ public class MarkupFileTester {
                 addTestResultPair(list, test, result, testNumber, testName);
                 testNumber = mTest.group(1);
                 testName = mTest.group(2);
-                test = new StringBuffer();
-                result = new StringBuffer();
+                test = new StringBuilder();
+                result = new StringBuilder();
                 curbuf = test;
             } else if (mResult.matches()) { // # Result
                 if (testNumber == null) {
@@ -131,7 +130,7 @@ public class MarkupFileTester {
         return list;
     }
 
-    private static void addTestResultPair(List list, StringBuffer testbuf, StringBuffer resultbuf, String testNumber, String testName) {
+    private static void addTestResultPair(List list, StringBuilder testbuf, StringBuilder resultbuf, String testNumber, String testName) {
         if (testbuf == null || resultbuf == null) {
             return;
         }

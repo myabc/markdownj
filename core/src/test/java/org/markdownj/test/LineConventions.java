@@ -33,17 +33,16 @@ software, even if advised of the possibility of such damage.
 
 */
 
-package com.petebevin.markdown.test;
+package org.markdownj.test;
 
-import com.petebevin.markdown.HTMLDecoder;
-import com.petebevin.markdown.MarkdownProcessor;
-
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import org.markdownj.MarkdownProcessor;
 
-public class EmailAddresses {
-    MarkdownProcessor m;
+public class LineConventions {
+    private static final String EXPECTED = "<p>a\nb\nc</p>\n";
+    private MarkdownProcessor m;
 
     @Before
     public void createProcessor() {
@@ -51,19 +50,19 @@ public class EmailAddresses {
     }
 
     @Test
-    public void testDecoder() {
-        String encoded = "&#98;&#105;&#x6C;&#x6C;&#x67;&#64;&#x6D;i&#x63;&#x72;&#x6F;&#115;&#x6F;&#x66;&#116;&#x2E;c&#111;&#109;";
-        String billg = "billg@microsoft.com";
-
-        assertEquals(billg, HTMLDecoder.decode(encoded));
-        assertEquals("", HTMLDecoder.decode(""));
+    public void testUnixLineConventions() {
+        assertEquals(EXPECTED, m.markdown("a\nb\nc\n"));
     }
 
     @Test
-    public void testEmail() {
-        String html = m.markdown("<billg@microsoft.com>");
-        String plain = HTMLDecoder.decode(html);
-        assertEquals("<p><a href=\"mailto:billg@microsoft.com\">billg@microsoft.com</a></p>\n", plain);
-        assertFalse("Email addresses are masked", plain.equals(html));
+    public void testWindowsLineConventions() {
+        MarkdownProcessor markup = new MarkdownProcessor();
+        assertEquals(EXPECTED, markup.markdown("a\r\nb\r\nc\r\n"));
+    }
+
+    @Test
+    public void testMacLineConventions() {
+        MarkdownProcessor markup = new MarkdownProcessor();
+        assertEquals(EXPECTED, markup.markdown("a\rb\rc\r"));
     }
 }
