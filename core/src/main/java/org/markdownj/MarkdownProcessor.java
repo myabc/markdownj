@@ -200,7 +200,7 @@ public class MarkdownProcessor {
                 "(.*\\n)*?" +
                 "</\\2>" +
                 "[ ]*" +
-                "(?=\\n+|\\Z))", Pattern.MULTILINE);
+                "(?=\\n+|\\Z))", Pattern.MULTILINE |  Pattern.CASE_INSENSITIVE);
 
         Replacement protectHTML = new Replacement() {
             public String replacement(Matcher m) {
@@ -218,7 +218,7 @@ public class MarkdownProcessor {
                 "(.*\\n)*?" +
                 ".*</\\2>" +
                 "[ ]*" +
-                "(?=\\n+|\\Z))", Pattern.MULTILINE);
+                "(?=\\n+|\\Z))", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
         text.replaceAll(p2, protectHTML);
 
         // Special case for <hr>
@@ -234,7 +234,7 @@ public class MarkdownProcessor {
                 "([^<>])*?" +
                 "/?>" +
                 "[ ]*" +
-                "(?=\\n{2,}|\\Z))");
+                "(?=\\n{2,}|\\Z))", Pattern.CASE_INSENSITIVE);
         text.replaceAll(p3, protectHTML);
 
         // Special case for standalone HTML comments:
@@ -842,7 +842,7 @@ public class MarkdownProcessor {
         // Ampersand-encoding based entirely on Nat Irons's Amputator MT plugin:
         // http://bumppo.net/projects/amputator/
         markup.replaceAll("&(?!#?[xX]?(?:[0-9a-fA-F]+|\\w+);)", "&amp;");
-        markup.replaceAll("<(?![a-z/?\\$!])", "&lt;");
+        markup.replaceAll("<(?![a-zA-Z/?\\$!])", "&lt;");
         return markup;
     }
 
