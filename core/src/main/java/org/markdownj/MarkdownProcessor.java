@@ -387,7 +387,7 @@ public class MarkdownProcessor {
                         String[] splitted = text.split("\\n");
                         return splitted[0];
                     }
-                    
+
                     public boolean isLanguageIdentifier(String line)
                     {
                         if (line == null) return false;
@@ -397,7 +397,7 @@ public class MarkdownProcessor {
                         }
                         return lang.length() > 0;
                     }
-                    
+
                     public String languageBlock(String firstLine, String text)
                     {
                         // dont'use %n in format string (markdown aspect every new line char as "\n")
@@ -671,7 +671,7 @@ public class MarkdownProcessor {
         // Inline image syntax
     	text.replaceAll("!\\[(.*)\\]\\((.*) \"(.*)\"\\)", "<img src=\"$2\" alt=\"$1\" title=\"$3\" />");
     	text.replaceAll("!\\[(.*)\\]\\((.*)\\)", "<img src=\"$2\" alt=\"$1\" />");
-        
+
         // Reference-style image syntax
     	Pattern imageLink = Pattern.compile("(" +
             	"[!]\\[(.*?)\\]" + // alt text = $2
@@ -687,7 +687,7 @@ public class MarkdownProcessor {
             	if (id == null || "".equals(id)) {
                 	id = altText.toLowerCase();
             	}
-           	 
+
             	// imageDefinition is the same as linkDefinition
             	LinkDefinition defn = linkDefinitions.get(id);
             	if (defn != null) {
