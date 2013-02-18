@@ -304,7 +304,7 @@ public class MarkdownProcessor {
     }
 
     private String encodeEmail(String s) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         char[] email = s.toCharArray();
         for (char ch : email) {
             double r = rnd.nextDouble();
@@ -603,7 +603,7 @@ public class MarkdownProcessor {
 
     private String join(String separator, String[] strings) {
         int length = strings.length;
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         if (length > 0) {
             buf.append(strings[0]);
             for (int i = 1; i < length; i++) {
@@ -771,7 +771,7 @@ public class MarkdownProcessor {
                 // protect emphasis (* and _) within urls
                 url = url.replaceAll("\\*", CHAR_PROTECTOR.encode("*"));
                 url = url.replaceAll("_", CHAR_PROTECTOR.encode("_"));
-                StringBuffer result = new StringBuffer();
+                StringBuilder result = new StringBuilder();
                 result.append("<a href=\"").append(url).append("\"");
                 if (title != null) {
                     // protect emphasis (* and _) within urls
@@ -878,7 +878,7 @@ public class MarkdownProcessor {
     }
 
     public static void main(String[] args) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         char[] cbuf = new char[1024];
         java.io.Reader in = new java.io.InputStreamReader(System.in);
         try {
