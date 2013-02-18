@@ -57,7 +57,6 @@ public class MarkdownProcessor {
     private static final CharacterProtector HTML_PROTECTOR = new CharacterProtector();
     private static final CharacterProtector CHAR_PROTECTOR = new CharacterProtector();
     private int listLevel;
-    private String emptyElementSuffix = " />";
     private int tabWidth = 4;
 
     /**
