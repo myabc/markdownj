@@ -44,7 +44,7 @@ software, even if advised of the possibility of such damage.
     <groupId>org.markdownj</groupId>
     <artifactId>markdownj</artifactId>
     <packaging>pom</packaging>
-    <version>0.4</version>
+    <version>0.5-SNAPSHOT</version>
 
     <name>MarkdownJ</name>
     <url>http://markdownj.org/</url>
@@ -96,7 +96,7 @@ software, even if advised of the possibility of such damage.
         <connection>scm:git:git://github.com/myabc/markdownj.git</connection>
         <developerConnection>scm:git:git@github.com:myabc/markdownj.git</developerConnection>
         <url>http://github.com/myabc/markdownj/</url>
-        <tag>markdownj-0.4</tag>
+        <tag>master</tag>
     </scm>
 
     <issueManagement>

@@ -38,7 +38,7 @@ software, even if advised of the possibility of such damage.
     <parent>
         <groupId>org.markdownj</groupId>
         <artifactId>markdownj</artifactId>
-        <version>0.4</version>
+        <version>0.5-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
