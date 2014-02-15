@@ -197,6 +197,7 @@ software, even if advised of the possibility of such damage.
            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-scm-plugin</artifactId>
+                <version>1.9</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.scm</groupId>
@@ -216,6 +217,7 @@ software, even if advised of the possibility of such damage.
             </plugin>
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
+                <version>3.3</version>
                 <configuration>
                     <locales>en</locales>
                 </configuration>
