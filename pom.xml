@@ -202,7 +202,7 @@ software, even if advised of the possibility of such damage.
                     <dependency>
                         <groupId>org.apache.maven.scm</groupId>
                         <artifactId>maven-scm-provider-gitexe</artifactId>
-                        <version>1.1-db-1</version>
+                        <version>1.9</version>
                     </dependency>
                 </dependencies>
             </plugin>
