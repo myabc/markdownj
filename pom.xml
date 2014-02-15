@@ -102,8 +102,8 @@ software, even if advised of the possibility of such damage.
     </scm>
 
     <issueManagement>
-        <system>Google Code</system>
-        <url>http://code.google.com/p/markdownj/issues</url>
+        <system>GitHub Issues</system>
+        <url>https://github.com/myabc/markdownj/issues</url>
     </issueManagement>
 
     <distributionManagement>
