@@ -186,13 +186,7 @@ software, even if advised of the possibility of such damage.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.scm</groupId>
-                        <artifactId>maven-scm-provider-gitexe</artifactId>
-                        <version>1.1-db-1</version>
-                    </dependency>
-                </dependencies>
+                <version>2.4.2</version>
             </plugin>
            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
