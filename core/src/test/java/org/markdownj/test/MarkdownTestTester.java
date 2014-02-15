@@ -39,6 +39,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -63,7 +64,12 @@ public class MarkdownTestTester {
     public static Collection<Object[]> markdownTests() {
         List list = new ArrayList<Object[]>();
         URL fileUrl = MarkdownTestTester.class.getResource(MARKDOWN_TEST_DIR);
-        File dir = new File(fileUrl.getFile());
+        File dir;
+        try {
+          dir = new File(fileUrl.toURI());
+        } catch(URISyntaxException e) {
+          dir = new File(fileUrl.getFile());
+        }
         File[] dirEntries = dir.listFiles();
 
         for (int i = 0; i < dirEntries.length; i++) {

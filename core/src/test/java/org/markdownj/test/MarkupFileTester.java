@@ -36,8 +36,10 @@ software, even if advised of the possibility of such damage.
 package org.markdownj.test;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -84,8 +86,14 @@ public class MarkupFileTester {
     public static List<TestResultPair> newTestResultPairList(String filename) throws IOException {
         List<TestResultPair> list = new ArrayList<TestResultPair>();
         URL fileUrl = MarkupFileTester.class.getResource(filename);
-        FileReader file = new FileReader(fileUrl.getFile());
-        BufferedReader in = new BufferedReader(file);
+        File file;
+        try {
+          file = new File(fileUrl.toURI());
+        } catch(URISyntaxException e) {
+          file = new File(fileUrl.getFile());
+        }
+        FileReader fileReader = new FileReader(file);
+        BufferedReader in = new BufferedReader(fileReader);
         StringBuilder test = null;
         StringBuilder result = null;
 
