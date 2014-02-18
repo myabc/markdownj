@@ -40,15 +40,32 @@
 
 <h2>What’s New?</h2>
 
-<p>See the ChangeLog.</p>
+<p>See the <a href="https://github.com/myabc/markdownj/releases">latest release</a>.</p>
 
 <h2>Install</h2>
 
-<p>See <a href="http://code.google.com/p/markdownj/wiki/Maven">http://code.google.com/p/markdownj/wiki/Maven</a></p>
+with Maven:
+
+<code><pre>
+<dependency>
+  <groupId>org.markdownj</groupId>
+  <artifactId>markdownj</artifactId>
+  <version>0.4.0</version>
+</dependency>
+</pre></code>
+
+with Gradle:
+
+<code><pre>
+  'org.markdownj:markdownj:0.4.0'
+</pre></code>
 
 <h2>How do I use it?</h2>
 
-<p>See the Quick Start guide.</p>
+<pre><code>
+  MarkdownProcessor markdown = new MarkdownProcessor();
+  String html = markdown.markdown("*italic*   **bold**\n_italic_   __bold__");
+</code></pre>
 
 <h2>License</h2>
 
@@ -67,7 +84,7 @@
       </footer>
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-		          <script type="text/javascript">
+              <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
