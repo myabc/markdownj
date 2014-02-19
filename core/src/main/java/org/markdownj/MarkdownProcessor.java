@@ -496,7 +496,7 @@ public class MarkdownProcessor {
                 public String replacement(Matcher m) {
                     String list = m.group(1);
                     String listStart = m.group(3);
-                    String listType = "";
+                    String listType;
 
                     if (listStart.matches("[*+-]")) {
                      listType = "ul";
@@ -511,7 +511,7 @@ public class MarkdownProcessor {
                     String result = processListItems(list);
 
                     String html;
-                    if (listStart.matches("[*+-]")) {
+                    if ("ul".equals(listType)) {
                         html = "<ul>\n" + result + "</ul>\n";
                     } else {
                         html = "<ol>\n" + result + "</ol>\n";
