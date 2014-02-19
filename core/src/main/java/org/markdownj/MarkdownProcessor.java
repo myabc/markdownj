@@ -686,7 +686,7 @@ public class MarkdownProcessor {
             	String wholeMatch = m.group(1);
             	String altText = m.group(2);
             	String id = m.group(3).toLowerCase();
-            	if (id == null || "".equals(id)) {
+            	if ("".equals(id)) {
                 	id = altText.toLowerCase();
             	}
 
@@ -725,7 +725,7 @@ public class MarkdownProcessor {
                 String wholeMatch = m.group(1);
                 String linkText = m.group(2);
                 String id = m.group(3).toLowerCase();
-                if (id == null || "".equals(id)) { // for shortcut links like [this][]
+                if ("".equals(id)) { // for shortcut links like [this][]
                     id = linkText.toLowerCase();
                 }
 
