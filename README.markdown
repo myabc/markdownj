@@ -5,9 +5,11 @@ README
 
 MarkdownJ is the pure Java port of Markdown (a text-to-html conversion tool written by John Gruber.)
 
-Maven dependency as 
+### Quick Start
 
-```
+If you're after the core functionality provided by MarkdownJ, add `markdown-core` as a dependency:
+
+```xml
 <dependency>
   <groupId>org.markdownj</groupId>
   <artifactId>markdownj-core</artifactId>
