@@ -1,6 +1,8 @@
 README
 ======
 
+[![Join the chat at https://gitter.im/myabc/markdownj](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/myabc/markdownj?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/myabc/markdownj.png?branch=master)](https://travis-ci.org/myabc/markdownj)
 
 MarkdownJ is the pure Java port of Markdown (a text-to-html conversion tool written by John Gruber.)
